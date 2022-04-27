@@ -1,0 +1,133 @@
+<div [@routerTransition]>
+    <div [class]="containerClass">
+      <div class="card card-custom gutter-b">
+        <div class="card-body">
+          <div class="content d-flex flex-column flex-column-fluid">
+            <div class="kt-subheader kt-grid__item">
+              <div class="kt-container">
+                <div class="kt-subheader__main">
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    
+                </div>
+                <br>
+                <br>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <button class="btn btn-primary" (click)="createStoreModal.show()"><i class="fa fa-plus"></i>
+                            {{"Create New Store" | localize}}</button>
+                    </div> <br>
+                </div>
+            </div>
+        </div>
+        <div class="kt-container kt-grid__item kt-grid__item--fluid">
+                       
+            <div class="kt-portlet kt-portlet--mobile">   
+              <br> <div class="kt-portlet__body  kt-portlet__body--fit">
+                    <h3>{{"Store" | localize}}</h3> <br>
+                    <form autocomplete="off">
+                        <div class="kt-form">
+                            <div class="row align-items-center kt-margin-b-10">
+                                <div class="col-xl-12">
+                                    <div class="form-group align-items-center">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filter" name="filterText" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot' | localize)" type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getStore()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row align-items-center">
+                        <div class="primeng-datatable-container">
+                          <p-table
+                            #dataTableBooks
+                            sortMode="multiple"
+                            [value]="store"
+                            [paginator]="false"
+                            [lazy]="true"
+                            scrollable="true"
+                            ScrollWidth="100%"
+                          >
+
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th style="width: 200px" pSortableColumn="storeName" (click)="sortTable('storeName')">
+                                {{ 'Store' | localize }}
+                                <p-sortIcon field="storeName"></p-sortIcon>
+                              </th>
+                              <th style="width: 200px" pSortableColumn="address" (click)="sortTable('address')">
+                                {{ 'Address' | localize }}
+                                <p-sortIcon field="address"></p-sortIcon>
+                              </th>
+                              <th style="width: 200px">
+                                {{ 'City' | localize }}
+                                <p field="city"></p>
+                              </th>
+                          
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                  <td style="width: 200px">
+                                    {{ record.storeName }}
+                                  </td>
+                                  <td style="width: 200px">
+                                    {{ record.address }}
+                                  </td>                               
+                                  <td style="width: 100px">
+                                    {{ record.city.cityName +', '+record.city.country }}
+                                  </td>   
+
+                                  <td style="width: 50px">
+                                    <div class="col kt-align-right">
+                                      <button
+                                        (click)="editStoreModal.show(record.id)"
+                                        title="{{ l('Edit') }}"
+                                        class="btn btn-outline-warning m-btn m-btn--icon m-btn--icon-only m-btn--pill"
+                                        href="javascript:;"
+                                      >
+                                        <i class="fas fa-pencil-alt"></i>
+                                      </button>
+                                    </div>
+                                  </td>
+
+                                  <td style="width: 50px">
+                                    <div class="col kt-align-right">
+                                      <button
+                                        id="deleteStore"
+                                        (click)="deleteStore(record)"
+                                        title="{{ 'Delete' | localize }}"
+                                        class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill btn-icon"
+                                        href="javascript:;"
+                                      >
+                                        <i class="fa fa-times"></i>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                            </ng-template>
+                          </p-table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            <createStoreModal #createStoreModal (modalSave)="getStore()"></createStoreModal>
+           <editStoreModal #editStoreModal (modalSave)="getStore()"></editStoreModal>
+
+        </div>   
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+

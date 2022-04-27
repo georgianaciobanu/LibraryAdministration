@@ -1,0 +1,109 @@
+<style>
+.geo-buttons { 
+  background-color: #3699FF;
+  color: black;
+  border: 1px solid black; /* Green */
+  color:white;
+  transition-duration: 0.4s;
+}
+ 
+.geo-buttons:hover {
+    background-color: #3699FF; /* Green */
+    color: white;
+  }
+
+
+</style>
+
+
+<div
+  bsModal
+  #modal="bs-modal"
+  (onShown)="onShown()"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modal"
+  aria-hidden="true"
+  [config]="{backdrop: 'static'}"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form *ngIf="active" #publisherForm="ngForm" novalidate (ngSubmit)="save()">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <span>{{"Create New Publisher" | localize}}</span>
+          </h4>
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>{{l("Image")}}</label>
+          <section>
+            <button class="geo-buttons" (click)="compressFile()">Choose image</button>
+            <br />
+            <img
+              style="max-height: 100%; max-width: 100%; width: 120px"
+              id="authorImage"
+              *ngIf="imgResultAfterCompression"
+              [src]="imgResultAfterCompression"
+              alt=""
+            />
+          </section>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>{{"Name" | localize}}</label>
+            <input
+              #nameInput
+              class="form-control"
+              type="text"
+              name="name"
+              [(ngModel)]="publisher.name"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Phone" | localize}}</label>
+            <input #nameInput class="form-control" type="text" name="phone" [(ngModel)]="publisher.phone" />
+          </div>
+          <div class="form-group">
+            <label>{{"Email" | localize}}</label>
+            <input #nameInput class="form-control" type="text" name="email" [(ngModel)]="publisher.email" />
+          </div>
+
+          <div class="form-group">
+            <label>{{l("City")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="cityId"
+                [settings]="chooseone"
+                [options]="citiesAfterParseClass"
+                [(ngModel)]="selectedCity"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+          </div>
+        </div>
+    </div>
+        <div class="modal-footer">
+          <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">
+            {{"Cancel" | localize}}
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!publisherForm.form.valid"
+            [buttonBusy]="saving"
+            [busyText]="l('SavingWithThreeDot' | localize)"
+          >
+            <i class="fa fa-save"></i>
+            <span>{{"Save" | localize}}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

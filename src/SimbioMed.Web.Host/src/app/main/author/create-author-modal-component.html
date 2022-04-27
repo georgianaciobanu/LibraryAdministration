@@ -1,0 +1,116 @@
+<div
+  bsModal
+  #modal="bs-modal"
+  (onShown)="onShown()"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modal"
+  aria-hidden="true"
+  [config]="{backdrop: 'static'}"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form *ngIf="active" #authorForm="ngForm" novalidate (ngSubmit)="save()">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <span>{{"Create New Author" | localize}}</span>
+          </h4>
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>{{l("Image")}}</label>
+          <section>
+            <button class="geo-buttons" (click)="compressFile()">Choose image</button>
+            <br />
+            <img
+              style="max-height: 100%; max-width: 100%; width: 120px"
+              id="authorImage"
+              *ngIf="imgResultAfterCompression"
+              [src]="imgResultAfterCompression"
+              alt=""
+            />
+          </section>
+
+
+          <div class="form-group">
+            <label>{{"First Name" | localize}}</label>
+            <input
+              #nameInput
+              class="form-control"
+              type="text"
+              name="firstName"
+              [(ngModel)]="author.firstName"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Last Name" | localize}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="lastName"
+              [(ngModel)]="author.lastName"
+              required
+              maxlength="300"
+            />
+          </div>
+
+          <div class="form-group form-md-line-input no-hint">
+            <label>{{l("Date of Birth")}}</label>
+            <br />
+            <input #nameInput class="form-control" type="date" name="dateOfBirth" [(ngModel)]="author.dateOfBirth" />
+            <br />
+          </div>
+          <div class="form-group form-md-line-input no-hint">
+            <label>{{l("Date of Death")}}</label>
+            <br />
+            <input #nameInput class="form-control" type="date" name="dateOfDeath" [(ngModel)]="author.dateOfDeath" />
+            <br />
+          </div>
+
+          <div class="form-group form-md-line-input no-hint">
+            <label>{{l("Gender")}}</label>
+            <select name="Gender" [(ngModel)]="author.gender" class="form-control">
+              <option value="0">{{"Masculine" | localize}}</option>
+              <option value="1">{{"Feminine" | localize}}</option>
+              <option value="2">{{"Other" | localize}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>{{l("City")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="cityId"
+                [settings]="chooseone"
+                [options]="citiesAfterParseClass"
+                [(ngModel)]="selectedCity"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">
+            {{"Cancel" | localize}}
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!authorForm.form.valid"
+            [buttonBusy]="saving"
+            [busyText]="l('SavingWithThreeDot' | localize)"
+          >
+            <i class="fa fa-save"></i>
+            <span>{{"Save" | localize}}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<style>
+    .btn-primary {
+  color: #34bfa3;
+  background-color: #fff;
+  border-color: #34bfa3; }
+  .btn-primary:hover {
+    color: #fff;
+    background-color: #34bfa3;
+    border-color: #34bfa3; }
+    .btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #34bfa3;
+    border-color: #34bfa3; }
+</style>
+<div  bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+      <div class="modal-content" id="modalCity">
+          <form *ngIf="active" #cityForm="ngForm" novalidate (ngSubmit)="save()">
+              <div class="modal-header">
+                 
+                  <h4 class="modal-title">
+                      <span>{{l("Edit city")}}</span>
+                  </h4>
+                  <button type="button" class="close" (click)="close()" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+              </div>
+              <div class="modal-body">
+
+                  <div class="form-group form-md-line-input no-hint">
+                          <label>{{l("City")}}</label>
+                      <input #titleInput class="form-control" type="text" name="cityName" [(ngModel)]="city.cityName" >
+                     
+                  </div>
+
+                  <div class="form-group form-md-line-input no-hint">
+                          <label>{{l("Country")}}</label>
+                      <input class="form-control" type="text" name="country" [(ngModel)]="city.country" >
+                 
+                  </div>
+
+                </div> 
+                  <div class="modal-footer">
+                      <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                      <button type="submit" class="btn btn-primary blue" [disabled]="!cityForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                  </div>
+                          
+          </form>
+      </div>
+  </div>
+</div>
