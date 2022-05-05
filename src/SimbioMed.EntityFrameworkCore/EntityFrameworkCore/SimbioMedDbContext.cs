@@ -31,8 +31,13 @@ namespace SimbioMed.EntityFrameworkCore
         public virtual DbSet<Author.Author> Authors { get; set; }
         public virtual DbSet<Publisher.Publisher> Publishers { get; set; }
         public virtual DbSet<Book.BookCategory> BookCategories { get; set; }
+        public virtual DbSet<Sale.Sale> Sale { get; set; }
+        public virtual DbSet<Sale.SaleDetail> SaleDetails { get; set; }
 
         public virtual DbSet<Customer.Customer> Customers { get; set; }
+        public virtual DbSet<BookUnit.BookUnit> BookUnit { get; set; }
+        public virtual DbSet<Discount.Discount> Discount { get; set; }
+
 
 
 

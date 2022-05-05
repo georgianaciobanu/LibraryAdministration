@@ -82,20 +82,14 @@ export class EditBookModalComponent extends AppComponentBase {
             this.modal.show();
 
 
-        });
-
-
-
-
-
-
+        }); 
     }
 
 
     getBookCategories(bookId): void {
         let dis = this;
         this._bookService.getBookCategory(bookId).subscribe((result) => {
-            this.bookCategory = result.items;
+            this.bookCategory = result;
 
             dis.bookCategory.forEach(element => {
                 dis.selectedCategories.push(element.categoryId);
@@ -165,7 +159,6 @@ export class EditBookModalComponent extends AppComponentBase {
             });
 
         });
-        await new Promise(f => setTimeout(f, 2000));
 
 
         this.selectedCategories.forEach(function (categ) {

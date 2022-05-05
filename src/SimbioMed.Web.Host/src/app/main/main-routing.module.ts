@@ -41,6 +41,18 @@ import { RouterModule } from '@angular/router';
                         path: 'customer',
                         loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
                     },
+                    {
+                        path: 'bookUnit',
+                        loadChildren: () => import('./bookUnit/bookUnit.module').then(m => m.BookUnitModule)
+                    },
+                    {
+                        path: 'discount',
+                        loadChildren: () => import('./discount/discount.module').then(m => m.DiscountModule)
+                    },
+                    {
+                        path: 'sale',
+                        loadChildren: () => import('./sale/sale.module').then(m => m.SaleModule)
+                    },
                                          
                     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
                     { path: '**', redirectTo: 'dashboard' },

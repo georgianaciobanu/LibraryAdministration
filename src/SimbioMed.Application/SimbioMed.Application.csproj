@@ -22,5 +22,6 @@
     <ProjectReference Include="..\SimbioMed.Application.Shared\SimbioMed.Application.Shared.csproj" />
     <ProjectReference Include="..\SimbioMed.Core\SimbioMed.Core.csproj" />
     <ProjectReference Include="..\SimbioMed.EntityFrameworkCore\SimbioMed.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\SimbioMed.Migrator\SimbioMed.Migrator.csproj" />
   </ItemGroup>
 </Project>

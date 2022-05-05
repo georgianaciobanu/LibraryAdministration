@@ -10,7 +10,7 @@ namespace SimbioMed.Book {
     public class BookCategory: FullAuditedEntity {
 
         [ForeignKey("BookId")]
-        public virtual Book Book { get; set; }
+        //public virtual Book Book { get; set; }
         public virtual int? BookId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category.Category Category { get; set; }

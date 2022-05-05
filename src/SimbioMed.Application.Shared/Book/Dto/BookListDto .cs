@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using SimbioMed.Author.Dto;
 using SimbioMed.Book.DtoBookCategory;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace SimbioMed.Book.Dto {
 
         public int Id { get; set; }
         public  string Title { get; set; }
-        public AuthorInBookListDto Author { get; set; }
+        public AuthorListDto Author { get; set; }
         public int AuthorId { get; set; }
-        public List<BookCategoryListDto> Categories { get; set; }
+        public Collection<BookCategoryListDto> Categories { get; set; }
 
     }
 

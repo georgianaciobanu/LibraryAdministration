@@ -26,11 +26,13 @@ using SimbioMed.Authorization.Users.Importing.Dto;
 using SimbioMed.Authorization.Users.Profile.Dto;
 using SimbioMed.Book.Dto;
 using SimbioMed.Book.DtoBookCategory;
+using SimbioMed.BookUnit.Dto;
 using SimbioMed.Category.Dto;
 using SimbioMed.Chat;
 using SimbioMed.Chat.Dto;
 using SimbioMed.City.Dto;
 using SimbioMed.Customer.Dto;
+using SimbioMed.Discount.Dto;
 using SimbioMed.DynamicEntityProperties.Dto;
 using SimbioMed.Editions;
 using SimbioMed.Editions.Dto;
@@ -46,6 +48,8 @@ using SimbioMed.MultiTenancy.Payments.Dto;
 using SimbioMed.Notifications.Dto;
 using SimbioMed.Organizations.Dto;
 using SimbioMed.Publisher.Dto;
+using SimbioMed.Sale.Dto;
+using SimbioMed.Sale.DtoSaleDetail;
 using SimbioMed.Sessions.Dto;
 using SimbioMed.Store.Dto;
 using SimbioMed.WebHooks.Dto;
@@ -89,8 +93,10 @@ namespace SimbioMed
             configuration.CreateMap<CreateBookInput, Book.Book>();
             configuration.CreateMap<Book.Book, GetBookForEditOutput>();
             configuration.CreateMap<Author.Author, AuthorInBookListDto>().ReverseMap();
+            configuration.CreateMap<Book.BookCategory, BookCategoryListDto>().ReverseMap();
             configuration.CreateMap<Book.BookCategory, BookCategoryListDto>();
             configuration.CreateMap<CreateBookCategoryInput, Book.BookCategory>();
+            configuration.CreateMap<BookCategoryListDto,Book.BookCategory >();
 
 
 
@@ -99,11 +105,19 @@ namespace SimbioMed
             configuration.CreateMap<Category.Category, CategoryListDto>();
             configuration.CreateMap<CreateCategoryInput, Category.Category>();
             configuration.CreateMap<Category.Category, GetCategoryForEditOutput>();
+            configuration.CreateMap<Category.Category, CategoryFromBookListDto>();
+
+            
 
             //City
             configuration.CreateMap<City.City, CityListDto>();
             configuration.CreateMap<CreateCityInput, City.City>();
             configuration.CreateMap<City.City, GetCityForEditOutput>();
+
+            //Discount
+            configuration.CreateMap<Discount.Discount, DiscountListDto>();
+            configuration.CreateMap<CreateDiscountInput, Discount.Discount>();
+            configuration.CreateMap<Discount.Discount, GetDiscountForEditOutput>();
 
             //Store
             configuration.CreateMap<Store.Store, StoreListDto>();
@@ -115,6 +129,21 @@ namespace SimbioMed
             configuration.CreateMap<Author.Author, AuthorListDto>();
             configuration.CreateMap<CreateAuthorInput, Author.Author>();
             configuration.CreateMap<Author.Author, GetAuthorForEditOutput>();
+
+            //BookUnit
+            configuration.CreateMap<BookUnit.BookUnit, BookUnitListDto>();
+            configuration.CreateMap<CreateBookUnitInput, BookUnit.BookUnit>();
+            configuration.CreateMap<BookUnit.BookUnit, GetBookInputForEditOutput>();
+
+            //Sale
+            configuration.CreateMap<Sale.Sale, SaleListDto>();
+            configuration.CreateMap<CreateSaleInput, Sale.Sale>();
+            configuration.CreateMap<Sale.Sale, GetSaleForEditOutput>();
+
+            configuration.CreateMap<Sale.SaleDetail, SaleDetailListDto>().ReverseMap();
+            configuration.CreateMap<Sale.SaleDetail, SaleDetailListDto>();
+            configuration.CreateMap<CreateSaleDetailInput, Sale.SaleDetail>();
+            configuration.CreateMap<SaleDetailListDto, Sale.SaleDetail>();
 
             //Customer
             configuration.CreateMap<Customer.Customer, CustomerListDto>();

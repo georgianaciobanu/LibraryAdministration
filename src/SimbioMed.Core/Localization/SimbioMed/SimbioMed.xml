@@ -6,6 +6,8 @@
     <text name="Books">Books</text>
     <text name="Categories">Categories</text>
     <text name="City">City</text>
+    <text name="Sale">Sale</text>
+    <text name="Discount">Discount</text>
     <text name="Store">Store</text>
     <text name="Author">Author</text>
     <text name="Publisher">Publisher</text>

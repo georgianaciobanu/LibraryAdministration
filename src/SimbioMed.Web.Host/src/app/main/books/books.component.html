@@ -6,9 +6,7 @@
           <div class="kt-subheader kt-grid__item">
             <div class="kt-container">
               <div class="kt-subheader__main">
-                
                 <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-                
               </div>
               <div class="kt-subheader__toolbar">
                 <div class="kt-subheader__wrapper">
@@ -23,7 +21,10 @@
           <div class="kt-container kt-grid__item kt-grid__item--fluid">
             <div class="kt-portlet kt-portlet--mobile">
               <div class="kt-portlet__body kt-portlet__body--fit">
-               <br><br> <h3>{{ 'Library Titles' | localize }}</h3> <br>
+                <br />
+                <br />
+                <h3>{{ 'Library Titles' | localize }}</h3>
+                <br />
                 <form autocomplete="off">
                   <div class="kt-form">
                     <div class="row align-items-center kt-margin-b-10">
@@ -64,15 +65,15 @@
                     >
                       <ng-template pTemplate="header">
                         <tr>
-                          <th style="width: 200px" pSortableColumn="title" (click)="sortTable('title')">
+                          <th style="width: 300px" pSortableColumn="title" (click)="sortTable('title')">
                             {{ 'Title' | localize }}
                             <p-sortIcon field="title"></p-sortIcon>
                           </th>
-                         <th style="width: 200px">
+                          <th style="width: 300px" pSortableColumn="author" (click)="sortTable('author')">
                             {{ 'Author' | localize }}
-                            <p field="author"></p>
+                            <p-sortIcon field="author"></p-sortIcon>
                           </th>
-                          <th style="width: 200px">
+                          <th style="width: 300px">
                             {{ 'Categories' | localize }}
                             <p field="categories"></p>
                           </th>
@@ -85,11 +86,11 @@
                             {{ record.title }}
                           </td>
                           <td style="width: 200px">
-                            {{ record.author.firstName+' '+record.author.lastName }}
+                            {{ record.author.firstName + ' ' + record.author.lastName }}
                           </td>
-                          <!-- <td style="width: 200px">
-                            {{record.categories }}
-                          </td> -->
+                          <td style="width: 200px">
+                            {{getListOfCategs(record.id)}}
+                          </td>
                           <td style="width: 50px">
                             <div class="col kt-align-right">
                               <button

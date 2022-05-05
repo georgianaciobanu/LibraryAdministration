@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using SimbioMed.Book;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,5 +18,6 @@ namespace SimbioMed.Category {
         public virtual string Name { get; set; }
         [Required]
         public virtual string Code { get; set; }
+
     }
 }

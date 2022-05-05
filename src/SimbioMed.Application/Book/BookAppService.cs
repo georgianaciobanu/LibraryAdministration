@@ -12,6 +12,7 @@ using SimbioMed.Category;
 using SimbioMed.Category.Dto;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,12 +47,16 @@ namespace SimbioMed.Book {
             await _bookCategoriesRepository.InsertAsync(bookCategory);
         }
 
-        public async Task DeleteBook(EntityDto input) {
+        public async Task DeleteBook(GetBookForEditInput input) {
             await _bookRepository.DeleteAsync(input.Id);
+            GetBookForEditOutput book = await GetBookForEdit(input);
+            foreach (BookCategoryListDto bookCateg in book.Categories) {
+                DeleteBookCategory(bookCateg.Id);
+            }
         }
 
-        public async Task DeleteBookCategory(EntityDto input) {
-            await _bookCategoriesRepository.DeleteAsync(input.Id);
+        public async Task DeleteBookCategory(int id) {
+            await _bookCategoriesRepository.DeleteAsync(id);
         }
 
 
@@ -64,14 +69,21 @@ namespace SimbioMed.Book {
 
         public async Task<GetBookForEditOutput> GetBookForEdit(GetBookForEditInput input) {
             var book = await _bookRepository.GetAsync(input.Id);
-            return ObjectMapper.Map<GetBookForEditOutput>(book);
+            var boo =  ObjectMapper.Map<GetBookForEditOutput>(book);
+            
+                GetBooksInput inp = new GetBooksInput();
+                inp.Filter = boo.Id.ToString();
+                boo.Categories = GetBookCategory(inp);
+            
+
+            return boo;
         }
-        public  ListResultDto<BookListDto> GetBooks(GetBooksInput input) {
+        public ListResultDto<BookListDto> GetBooks(GetBooksInput input) {
 
             var books =   _bookRepository
                 .GetAll()
                 .Include(p => p.Author)  
-                //.Include(p => p.Categories)
+                .Include(p => p.Categories)
                 .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
                     p => p.Title.ToLower().Contains(input.Filter.ToLower())
@@ -79,22 +91,27 @@ namespace SimbioMed.Book {
                 .OrderBy(p => p.Title)
                 .ToList();
 
+            var boo = new ListResultDto<BookListDto>(ObjectMapper.Map<List<BookListDto>>(books));
+            foreach (BookListDto elem in boo.Items) {
+                GetBooksInput inp = new GetBooksInput();
+                inp.Filter = elem.Id.ToString();
+                elem.Categories = GetBookCategory(inp);
+            }
 
-
-            return new ListResultDto<BookListDto>(ObjectMapper.Map<List<BookListDto>>(books));
+            return boo;
         }
 
-        public async Task<ListResultDto<BookCategoryListDto>> GetBookCategory(GetBooksInput input) {
-            var books =  _bookCategoriesRepository
-                .GetAll()
-                .Include(p => p.Book)
+        public Collection<BookCategoryListDto> GetBookCategory(GetBooksInput input) {
+            var ss =  _bookCategoriesRepository
+                .GetAll()              
+                .Include(p=>p.Category)
                 .WhereIf(
                     int.TryParse(input.Filter, out var x),
-                    p => p.Book.Id.Equals(int.Parse(input.Filter))
+                    p => p.BookId.Equals(int.Parse(input.Filter))
                 )
                 .ToList();
 
-            return new ListResultDto<BookCategoryListDto>(ObjectMapper.Map<List<BookCategoryListDto>>(books));
+            return new Collection<BookCategoryListDto>(ObjectMapper.Map<List<BookCategoryListDto>>(ss));
         }
 
 

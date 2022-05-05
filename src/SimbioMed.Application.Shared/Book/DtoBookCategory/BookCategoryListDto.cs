@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using SimbioMed.Book.Dto;
+using SimbioMed.Category.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace SimbioMed.Book.DtoBookCategory {
 
         public int Id { get; set; }
 
-        public BookListDto Book { get; set; }
+       // public BookListDto Book { get; set; }
         public int BookId { get; set; }
 
         public CategoryFromBookListDto Category { get; set; }

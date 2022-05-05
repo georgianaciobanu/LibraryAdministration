@@ -1,0 +1,237 @@
+<style>
+    .geo-buttons { 
+  background-color: #3699FF;
+  color: black;
+  border: 1px solid black; /* Green */
+  color:white;
+  transition-duration: 0.4s;
+}
+ 
+.geo-buttons:hover {
+    background-color: #3699FF; /* Green */
+    color: white;
+  }
+</style>
+
+<div
+  bsModal
+  #modal="bs-modal"
+  (onShown)="onShown()"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modal"
+  aria-hidden="true"
+  [config]="{backdrop: 'static'}"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form *ngIf="active" #bookUnitForm="ngForm" novalidate (ngSubmit)="save()">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <span>{{"Book" | localize}}</span>
+          </h4>
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>{{l("Image")}}</label>
+          <section>
+            <button class="geo-buttons" (click)="compressFile()">Choose image</button>
+            <br />
+            <img
+            style="max-height: 100%; max-width: 100%; width: 120px"
+            id="bookunitImage"
+            *ngIf="imgResultAfterCompression; else theOtherImage"
+            [src]="imgResultAfterCompression"
+            alt=""
+          />
+          <ng-template #theOtherImage>
+            <img
+              style="max-height: 100%; max-width: 100%; width: 120px"
+              id="bookUnitImage" 
+              [src]="bookUnit.photoFileBytes"
+              alt=""
+            />
+          </ng-template>
+        </section>
+
+          <div class="form-group">
+            <label>{{"ISBN" | localize}}</label>
+            <input
+              #nameInput
+              class="form-control"
+              type="text"
+              name="isbn"
+              [(ngModel)]="bookUnit.isbn"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Copy Number" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="copyNo"
+              [(ngModel)]="bookUnit.copyNo"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Price" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="price"
+              [(ngModel)]="bookUnit.price"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Pages" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="pages"
+              [(ngModel)]="bookUnit.pages"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Publishing Year" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="publishYear"
+              [(ngModel)]="bookUnit.publishYear"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group form-md-line-input no-hint">
+            <label>{{l("Condition")}}</label>
+            <select name="Condition" [(ngModel)]="bookUnit.condition" class="form-control">
+              <option value="0">{{"New" | localize}}</option>
+              <option value="1">{{"Used" | localize}}</option>
+              <option value="2">{{"Good" | localize}}</option>
+              <option value="3">{{"ReconditioningRequired" | localize}}</option>
+
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>{{l("Title")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="bookId"
+                [settings]="chooseone"
+                [options]="booksAfterParseClass"
+                [(ngModel)]="selectedBook"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+            </div>
+
+
+            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToTitle();">
+              <i class="fa fa-plus"></i>
+              Add Title
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label>{{l("Publisher")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="publisherId"
+                [settings]="chooseone"
+                [options]="publishersAfterParseClass"
+                [(ngModel)]="selectedPublisher"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+            </div>
+
+            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToPublisher();">
+              <i class="fa fa-plus"></i>
+              Add Publisher
+            </button>
+          </div>
+          <div class="form-group">
+            <label>{{l("Store")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="storeId"
+                [settings]="chooseone"
+                [options]="storesAfterParseClass"
+                [(ngModel)]="selectedStore"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+            </div>
+            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToStore();">
+              <i class="fa fa-plus"></i>
+              Add Store
+            </button>
+          </div>
+          <div class="form-group">
+            <label>{{"Location in the store" | localize}}</label>
+            <br>
+            <label>{{"Unit (A-J)" | localize}}</label>
+            <input
+              class="form-control"
+              type="text"
+              name="unit"
+              [(ngModel)]="bookUnit.unit"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Column (1-20)" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="column"
+              [(ngModel)]="bookUnit.column"
+              required
+              maxlength="200"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{"Row (1-20)" | localize}}</label>
+            <input
+              class="form-control"
+              type="number"
+              name="row"
+              [(ngModel)]="bookUnit.row"
+              required
+              maxlength="200"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">
+            {{"Cancel" | localize}}
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!bookUnitForm.form.valid"
+            [buttonBusy]="saving"
+            [busyText]="l('SavingWithThreeDot' | localize)"
+          >
+            <i class="fa fa-save"></i>
+            <span>{{"Save" | localize}}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

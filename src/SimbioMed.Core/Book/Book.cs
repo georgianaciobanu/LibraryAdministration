@@ -11,7 +11,6 @@ namespace SimbioMed.Book {
     [Table("Book")]
    public class Book: FullAuditedEntity {
         public const int MaxGeneralLength = 500;
-        public const int MaxPagesNo = 100000;
 
         [Required]
         [MaxLength(MaxGeneralLength)]
@@ -19,8 +18,8 @@ namespace SimbioMed.Book {
        
         [ForeignKey("AuthorId")]
         public virtual Author.Author Author { get; set; }
-        public virtual int? AuthorId { get; set; }
-        public virtual ICollection<BookCategory> Categories { get; set; }
+        public virtual int AuthorId { get; set; }
+       public virtual ICollection<BookCategory> Categories { get; set; }
 
 
     }
