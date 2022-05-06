@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimbioMed.EntityFrameworkCore;
 
 namespace SimbioMed.Migrations
 {
     [DbContext(typeof(SimbioMedDbContext))]
-    partial class SimbioMedDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220505205737_nou")]
+    partial class nou
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1887,49 +1889,6 @@ namespace SimbioMed.Migrations
                     b.ToTable("BookUnit");
                 });
 
-            modelBuilder.Entity("SimbioMed.BookUnit.DiscountBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BookUnitId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DiscountId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookUnitId");
-
-                    b.HasIndex("DiscountId");
-
-                    b.ToTable("DiscountBook");
-                });
-
             modelBuilder.Entity("SimbioMed.Category.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -2620,9 +2579,6 @@ namespace SimbioMed.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<double>("PriceWithDiscount")
-                        .HasColumnType("float");
-
                     b.Property<int>("Qtty")
                         .HasColumnType("int");
 
@@ -3021,21 +2977,6 @@ namespace SimbioMed.Migrations
                     b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("SimbioMed.BookUnit.DiscountBook", b =>
-                {
-                    b.HasOne("SimbioMed.BookUnit.BookUnit", "BookUnit")
-                        .WithMany("Discounts")
-                        .HasForeignKey("BookUnitId");
-
-                    b.HasOne("SimbioMed.Discount.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId");
-
-                    b.Navigation("BookUnit");
-
-                    b.Navigation("Discount");
-                });
-
             modelBuilder.Entity("SimbioMed.Customer.Customer", b =>
                 {
                     b.HasOne("SimbioMed.City.City", "City")
@@ -3222,11 +3163,6 @@ namespace SimbioMed.Migrations
             modelBuilder.Entity("SimbioMed.Book.Book", b =>
                 {
                     b.Navigation("Categories");
-                });
-
-            modelBuilder.Entity("SimbioMed.BookUnit.BookUnit", b =>
-                {
-                    b.Navigation("Discounts");
                 });
 
             modelBuilder.Entity("SimbioMed.Sale.Sale", b =>

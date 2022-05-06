@@ -19,5 +19,7 @@ namespace SimbioMed.Discount {
         [MaxLength(MaxValue)]
         public virtual float Value { get; set; }
 
+        
+
     }
 }

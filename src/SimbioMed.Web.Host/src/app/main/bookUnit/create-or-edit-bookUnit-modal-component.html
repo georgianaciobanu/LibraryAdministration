@@ -162,6 +162,25 @@
               Add Publisher
             </button>
           </div>
+
+          <div class="form-group">
+            <label>{{l("Discouns")}}</label>
+            <div class="container text-centre">
+              <ss-multiselect-dropdown
+                class="form-group"
+                name="discountId"
+                [settings]="choosemany"
+                [options]="discountsAfterParseClass"
+                [(ngModel)]="selectedDiscount"
+                [ngModelOptions]="{standalone: true}"
+              ></ss-multiselect-dropdown>
+             </div>
+             <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToDiscount();">
+              <i class="fa fa-plus"></i>
+              Add Discount
+            </button>
+            </div>
+            
           <div class="form-group">
             <label>{{l("Store")}}</label>
             <div class="container text-centre">

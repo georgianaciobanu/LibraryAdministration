@@ -43,6 +43,9 @@ namespace SimbioMed.BookUnit {
         public virtual Store.Store Store { get; set; }
         public virtual int? StoreId { get; set; }
 
+        public virtual ICollection<DiscountBook> Discounts { get; set; }
+
+
 
 
     }

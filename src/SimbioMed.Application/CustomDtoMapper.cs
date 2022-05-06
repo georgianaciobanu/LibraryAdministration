@@ -27,6 +27,7 @@ using SimbioMed.Authorization.Users.Profile.Dto;
 using SimbioMed.Book.Dto;
 using SimbioMed.Book.DtoBookCategory;
 using SimbioMed.BookUnit.Dto;
+using SimbioMed.BookUnit.DtoDiscountBook;
 using SimbioMed.Category.Dto;
 using SimbioMed.Chat;
 using SimbioMed.Chat.Dto;
@@ -49,6 +50,7 @@ using SimbioMed.Notifications.Dto;
 using SimbioMed.Organizations.Dto;
 using SimbioMed.Publisher.Dto;
 using SimbioMed.Sale.Dto;
+using SimbioMed.Sale.DtoDiscountSale;
 using SimbioMed.Sale.DtoSaleDetail;
 using SimbioMed.Sessions.Dto;
 using SimbioMed.Store.Dto;
@@ -135,6 +137,11 @@ namespace SimbioMed
             configuration.CreateMap<CreateBookUnitInput, BookUnit.BookUnit>();
             configuration.CreateMap<BookUnit.BookUnit, GetBookInputForEditOutput>();
 
+            configuration.CreateMap<BookUnit.DiscountBook, DiscountBookListDto>().ReverseMap();
+            configuration.CreateMap<BookUnit.DiscountBook, DiscountBookListDto>();
+            configuration.CreateMap<CreateDiscountBookInput, BookUnit.DiscountBook>();
+            configuration.CreateMap<DiscountBookListDto, BookUnit.DiscountBook>();
+
             //Sale
             configuration.CreateMap<Sale.Sale, SaleListDto>();
             configuration.CreateMap<CreateSaleInput, Sale.Sale>();
@@ -144,6 +151,12 @@ namespace SimbioMed
             configuration.CreateMap<Sale.SaleDetail, SaleDetailListDto>();
             configuration.CreateMap<CreateSaleDetailInput, Sale.SaleDetail>();
             configuration.CreateMap<SaleDetailListDto, Sale.SaleDetail>();
+
+
+            configuration.CreateMap<Sale.DiscountSale, DiscountSaleListDto>().ReverseMap();
+            configuration.CreateMap<Sale.DiscountSale, DiscountSaleListDto>();
+            configuration.CreateMap<CreateDiscountSaleInput, Sale.DiscountSale>();
+            configuration.CreateMap<DiscountSaleListDto, Sale.DiscountSale>();
 
             //Customer
             configuration.CreateMap<Customer.Customer, CustomerListDto>();

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimbioMed.EntityFrameworkCore;
 
 namespace SimbioMed.Migrations
 {
     [DbContext(typeof(SimbioMedDbContext))]
-    partial class SimbioMedDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220506075756_discountBook")]
+    partial class discountBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2619,9 +2621,6 @@ namespace SimbioMed.Migrations
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
-
-                    b.Property<double>("PriceWithDiscount")
-                        .HasColumnType("float");
 
                     b.Property<int>("Qtty")
                         .HasColumnType("int");

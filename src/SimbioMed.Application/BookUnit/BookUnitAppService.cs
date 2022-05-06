@@ -4,9 +4,11 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
 using SimbioMed.BookUnit.Dto;
+using SimbioMed.BookUnit.DtoDiscountBook;
 using SimbioMed.Storage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +18,16 @@ namespace SimbioMed.BookUnit {
 
         private readonly IRepository<BookUnit> _bookUnitRepository;
         private readonly IBinaryObjectManager _binaryObjectManager;
+        public readonly IRepository<DiscountBook> _discountBookRepository;
 
 
-        public BookUnitAppService(IRepository<BookUnit> bookUnitRepository, IBinaryObjectManager binaryObjectManager) {
+        public BookUnitAppService(IRepository<BookUnit> bookUnitRepository, IBinaryObjectManager binaryObjectManager, IRepository<DiscountBook> discountBookRepository) {
             _bookUnitRepository = bookUnitRepository;
             _binaryObjectManager = binaryObjectManager;
+            _discountBookRepository = discountBookRepository;
 
         }
-        public async Task CreateBookUnit(CreateBookUnitInput input) {
+        public async Task<int> CreateBookUnit(CreateBookUnitInput input) {
             var book = ObjectMapper.Map<BookUnit>(input);
 
             if (input.PhotoId != null) {
@@ -33,11 +37,17 @@ namespace SimbioMed.BookUnit {
                 await _binaryObjectManager.SaveAsync(storedPhoto);
                 book.PhotoId = storedPhoto.Id;
             }
-            await _bookUnitRepository.InsertAsync(book);
+            int id = await _bookUnitRepository.InsertAndGetIdAsync(book);
+
+            return id;
         }
 
-        public async Task DeleteBookUnit(EntityDto input) {
+        public async Task DeleteBookUnit(GetBookInputForEditInput input) {
             await _bookUnitRepository.DeleteAsync(input.Id);
+            GetBookInputForEditOutput bookUnit = await GetBookUnitForEdit(input);
+            foreach (DiscountBookListDto dis in bookUnit.Discounts) {
+                DeleteDiscountBook(dis.Id);
+            }
         }
 
         public ListResultDto<BookUnitListDto> GetBookUnit(GetBookUnitInput input) {
@@ -60,12 +70,24 @@ namespace SimbioMed.BookUnit {
                             .OrderBy(p => p.Book.Title)
                             .ToList();
 
-            return new ListResultDto<BookUnitListDto>(ObjectMapper.Map<List<BookUnitListDto>>(book));
+            var bo= new ListResultDto<BookUnitListDto>(ObjectMapper.Map<List<BookUnitListDto>>(book));
+            foreach (BookUnitListDto elem in bo.Items) {
+                GetBookUnitInput inp = new GetBookUnitInput();
+                inp.Filter = elem.Id.ToString();
+                elem.Discounts = GetDiscountBook(inp);
+
+            }
+
+            return bo;
         }
 
         public async Task<GetBookInputForEditOutput> GetBookUnitForEdit(GetBookInputForEditInput input) {
             var book = await _bookUnitRepository.GetAsync(input.Id);
-            return ObjectMapper.Map<GetBookInputForEditOutput>(book);
+            var bo= ObjectMapper.Map<GetBookInputForEditOutput>(book);
+            GetBookUnitInput inp = new GetBookUnitInput();
+            inp.Filter = bo.Id.ToString();
+            bo.Discounts = GetDiscountBook(inp);
+            return bo;
         }
 
         //public async Task<GetPictureOutput> GetPictureById(Guid pictureId) {
@@ -115,6 +137,28 @@ namespace SimbioMed.BookUnit {
 
 
             await _bookUnitRepository.UpdateAsync(book);
+        }
+
+        public Collection<DiscountBookListDto> GetDiscountBook(GetBookUnitInput input) {
+            var ds = _discountBookRepository
+                  .GetAll()
+                  .Include(p => p.Discount)
+                  .WhereIf(
+                      int.TryParse(input.Filter, out var x),
+                      p => p.BookUnitId.Equals(int.Parse(input.Filter))
+                  )
+                  .ToList();
+
+            return new Collection<DiscountBookListDto>(ObjectMapper.Map<List<DiscountBookListDto>>(ds));
+        }
+
+        public async Task CreateDiscountBook(CreateDiscountBookInput input) {
+            var discountBook = ObjectMapper.Map<DiscountBook>(input);
+            await _discountBookRepository.InsertAsync(discountBook);
+        }
+
+        public async Task DeleteDiscountBook(int id) {
+            await _discountBookRepository.DeleteAsync(id);
         }
     }
 }

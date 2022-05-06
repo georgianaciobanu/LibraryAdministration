@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using SimbioMed.Sale.Dto;
+using SimbioMed.Sale.DtoDiscountSale;
 using SimbioMed.Sale.DtoSaleDetail;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,12 @@ namespace SimbioMed.Sale {
         Task DeleteSaleDetail(int input);
 
         Task DeleteSale(GetSaleForEditInput input);
+
+
+        Collection<DiscountSaleListDto> GetDiscountSale(GetSaleInput input);
+
+        Task CreateDiscountSale(CreateDiscountSaleInput input);
+        Task DeleteDiscountSale(int input);
 
     }
 }

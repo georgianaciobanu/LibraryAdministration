@@ -11,7 +11,6 @@ namespace SimbioMed.Sale {
     [Table("Sale")]
 
     public class Sale : FullAuditedEntity {
-        
        
         public virtual string SaleNumber { get; set; }
         public virtual DateTime SaleDate { get; set; }
@@ -27,6 +26,8 @@ namespace SimbioMed.Sale {
         public virtual int? CustomerId { get; set; }
 
         public virtual ICollection<SaleDetail> Details { get; set; }
+        public virtual ICollection<DiscountSale> Discounts { get; set; }
+
 
     }
 }

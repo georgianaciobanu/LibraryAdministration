@@ -1,5 +1,8 @@
-﻿using System;
+﻿using SimbioMed.Sale.DtoDiscountSale;
+using SimbioMed.Sale.DtoSaleDetail;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace SimbioMed.Sale.Dto {
@@ -10,5 +13,7 @@ namespace SimbioMed.Sale.Dto {
         public virtual float TotalAmount { get; set; }
         public virtual int StoreId { get; set; }
         public virtual int CustomerId { get; set; }
+        public Collection<CreateSaleDetailInput> Details { get; set; }
+        public Collection<DiscountSaleListDto> Discounts { get; set; }
     }
 }

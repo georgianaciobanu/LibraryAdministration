@@ -1,5 +1,5 @@
 import { Component, ViewChild, Injector, ElementRef, Output, EventEmitter } from '@angular/core';
-import { CreateSaleDetailInput, SaleDetailListDto,SaleServiceProxy,BookUnitServiceProxy, BookUnitListDto, StoreListDto, CreateSaleInput, SaleListDto,CustomerServiceProxy,StoreServiceProxy,CustomerListDto } from '@shared/service-proxies/service-proxies';
+import {CreateDiscountSaleInput,DiscountListDto, DiscountSaleListDto, DiscountServiceProxy, CreateSaleDetailInput, SaleDetailListDto,SaleServiceProxy,BookUnitServiceProxy, BookUnitListDto, StoreListDto, CreateSaleInput, SaleListDto,CustomerServiceProxy,StoreServiceProxy,CustomerListDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { finalize } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -24,11 +24,16 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
     customers: CustomerListDto[] = [];
     saleDetail: CreateSaleDetailInput = new CreateSaleDetailInput();
     saleDetailView: SaleDetailListDto[]=[];
+    newList:CreateSaleDetailInput[]=[];
+    discountSale: CreateDiscountSaleInput = new CreateDiscountSaleInput();
+    discountSaleView: DiscountSaleListDto[]=[];
     stores: StoreListDto[] = [];
     bookUnit: BookUnitListDto[] = [];
+    discounts: DiscountListDto[] = [];
     selectedCustomer: number[] = [];
     selectedStore: number[] = [];
     selectedBook: number[] = [];
+    selectedDiscount: number[] = [];
     qtty: any;
     active: boolean = false;
     saving: boolean = false;
@@ -36,6 +41,7 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
     customersAfterParseClass: IMultiSelectOption[] = [];
     storesAfterParseClass: IMultiSelectOption[] = [];
     booksAfterParseClass: IMultiSelectOption[] = [];
+    discountsAfterParseClass: IMultiSelectOption[] = [];
     selectedBooks:BookUnitListDto[] = [];
 
     chooseone: IMultiSelectSettings = {
@@ -53,10 +59,9 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         enableSearch: true,
         checkedStyle: 'fontawesome',
         buttonClasses: 'form-control',
-        selectionLimit: 5,
         autoUnselect: true,
         closeOnSelect: true,
-        displayAllSelectedText: true
+        displayAllSelectedText: false
 
     };
     constructor(
@@ -65,6 +70,7 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         private _saleService: SaleServiceProxy,
         private _storeService: StoreServiceProxy,
         private _bookUnitService: BookUnitServiceProxy,
+        private _discountsService: DiscountServiceProxy,
         private router: Router
 
     ) {
@@ -75,15 +81,19 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         this.getCustomers();
         this.getStores();
         this.getBooks();
+        this.getDiscounts();
+
     }
 
     show(saleId): void {
          this.selectedCustomer=[];
          this.selectedBook=[];
+         this.selectedDiscount=[];
          this.selectedStore=[];
          this.customersAfterParseClass=[];
          this.storesAfterParseClass=[];
          this.booksAfterParseClass=[];
+         this.discountsAfterParseClass=[];
          this.active = true;
          this.sale = new CreateSaleInput();
          this.saleDetail=new CreateSaleDetailInput();
@@ -97,7 +107,9 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         for (let x = 0; x < this.bookUnit.length; x++) {
              this.booksAfterParseClass.push({ id: this.bookUnit[x].id, name: this.bookUnit[x].isbn+ ' '+this.bookUnit[x].book.title +' de '+this.bookUnit[x].book.author.firstName+' '+this.bookUnit[x].book.author.lastName+ ' '+this.bookUnit[x].publisher.name })
         }
-
+        for (let x = 0; x < this.discounts.length; x++) {
+            this.discountsAfterParseClass.push({ id: this.discounts[x].id, name: this.discounts[x].description+ ' '+this.discounts[x].value })
+       }
 
      
          if(saleId!=null){
@@ -109,6 +121,8 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
             });
 
             this.getSaleDetails(saleId);
+            this.getDiscountSale(saleId);
+            
 
          }
        
@@ -127,7 +141,19 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         });
     }
 
-   
+    getDiscountSale(saleId): void {
+        let dis = this;
+        this._saleService.getDiscountSale(saleId).subscribe((result) => {
+            this.discountSaleView = result;
+
+            dis.discountSaleView.forEach(element => {
+                dis.selectedDiscount.push(element.discountId);
+
+            });
+
+        });
+    }
+
 
      getCustomers(): void {
 
@@ -137,7 +163,13 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
 
     }
    
-    
+    getDiscounts(): void {
+
+        this._discountsService.getDiscounts('').subscribe((result) => {
+            this.discounts = result.items;
+        });
+
+    }
     getBooks(): void {
 
         this._bookUnitService.getBookUnit('').subscribe((result) => {
@@ -172,6 +204,10 @@ btnClick_goToStore= function () {
     this.router.navigateByUrl('/app/main/store');
 };
 
+btnClick_goToDiscount= function () {
+    this.router.navigateByUrl('/app/main/discount');
+};
+
 btnClick_goToCustomer= function () {
     this.router.navigateByUrl('/app/main/customer');
 };
@@ -188,15 +224,17 @@ btnClick_goToCustomer= function () {
         this.spinnerService.show();
         this.sale.customerId = this.selectedCustomer[0];
         this.sale.storeId = this.selectedStore[0];
+        this.addNewDetail();
         this._saleService.createSale(this.sale)
             .pipe(finalize(() => this.saving = false))
             .subscribe(result => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
                 this.spinnerService.hide();
-                this.modalSave.emit(this.sale);
+                this.modalSave.emit(this.sale);               
                 hs.insertedSaleId=result;
-                this.addNewDetail();
+                this.addNewDiscount();
+
 
             });
 
@@ -204,14 +242,35 @@ btnClick_goToCustomer= function () {
 
     addNewDetail(): void{
         let dis=this;
-        dis.selectedBook.forEach(function(det){
-            dis.saleDetail=new CreateSaleDetailInput();
-            dis.saleDetail.bookUnitId=det;
-            dis.saleDetail.saleId=dis.insertedSaleId;
-            dis._saleService.createSaleDetail(dis.saleDetail) 
+       
+        dis.selectedBook.forEach(async function(det){
+            let newDetail=new CreateSaleDetailInput();
+            newDetail.bookUnitId=det;
+            newDetail.saleId=dis.insertedSaleId;
+            newDetail.qtty=Number((<HTMLInputElement>document.getElementById("item-"+det)).value);
+            dis.newList.push(newDetail);
+            // dis._saleService.createSaleDetail(dis.saleDetail) 
+            // .pipe(finalize(() => dis.saving = false))
+            // .subscribe(() => {
+            //     dis.modalSave.emit(dis.saleDetail);
+            // });
+
+
+
+        } );
+    this.sale.details=this.newList;
+    }
+
+    addNewDiscount(): void{
+        let dis=this;
+        dis.selectedDiscount.forEach(function(det){
+            dis.discountSale=new CreateDiscountSaleInput();
+            dis.discountSale.discountId=det;
+            dis.discountSale.saleId=dis.insertedSaleId;
+            dis._saleService.createDiscountSale(dis.discountSale) 
             .pipe(finalize(() => dis.saving = false))
             .subscribe(() => {
-                dis.modalSave.emit(dis.saleDetail);
+                dis.modalSave.emit(dis.discountSale);
             });
 
 

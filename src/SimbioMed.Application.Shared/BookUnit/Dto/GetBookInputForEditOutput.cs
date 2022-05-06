@@ -1,6 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
+using SimbioMed.BookUnit.DtoDiscountBook;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace SimbioMed.BookUnit.Dto {
@@ -22,6 +24,9 @@ namespace SimbioMed.BookUnit.Dto {
         public virtual int? BookId { get; set; }
         public virtual int? PublisherId { get; set; }
         public virtual int? StoreId { get; set; }
+
+        public Collection<DiscountBookListDto> Discounts { get; set; }
+
 
     }
 }

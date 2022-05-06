@@ -2144,7 +2144,7 @@ export class BookUnitServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createBookUnit(body: CreateBookUnitInput | undefined): Observable<void> {
+    createBookUnit(body: CreateBookUnitInput | undefined): Observable<number> {
         let url_ = this.baseUrl + "/api/services/app/BookUnit/CreateBookUnit";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2156,6 +2156,7 @@ export class BookUnitServiceProxy {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
             })
         };
 
@@ -2166,14 +2167,14 @@ export class BookUnitServiceProxy {
                 try {
                     return this.processCreateBookUnit(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<number>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<number>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateBookUnit(response: HttpResponseBase): Observable<void> {
+    protected processCreateBookUnit(response: HttpResponseBase): Observable<number> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -2182,14 +2183,17 @@ export class BookUnitServiceProxy {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<number>(<any>null);
     }
 
     /**
@@ -2390,6 +2394,173 @@ export class BookUnitServiceProxy {
     }
 
     protected processEditBookUnit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @return Success
+     */
+    getDiscountBook(filter: string | undefined): Observable<DiscountBookListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/BookUnit/GetDiscountBook?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDiscountBook(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDiscountBook(<any>response_);
+                } catch (e) {
+                    return <Observable<DiscountBookListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DiscountBookListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDiscountBook(response: HttpResponseBase): Observable<DiscountBookListDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DiscountBookListDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DiscountBookListDto[]>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createDiscountBook(body: CreateDiscountBookInput | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/BookUnit/CreateDiscountBook";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateDiscountBook(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateDiscountBook(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateDiscountBook(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteDiscountBook(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/BookUnit/DeleteDiscountBook?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteDiscountBook(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteDiscountBook(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteDiscountBook(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -12128,7 +12299,7 @@ export class SaleServiceProxy {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -12380,6 +12551,173 @@ export class SaleServiceProxy {
     }
 
     protected processInsertNewSale(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @return Success
+     */
+    getDiscountSale(filter: string | undefined): Observable<DiscountSaleListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Sale/GetDiscountSale?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDiscountSale(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDiscountSale(<any>response_);
+                } catch (e) {
+                    return <Observable<DiscountSaleListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DiscountSaleListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDiscountSale(response: HttpResponseBase): Observable<DiscountSaleListDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DiscountSaleListDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DiscountSaleListDto[]>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createDiscountSale(body: CreateDiscountSaleInput | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Sale/CreateDiscountSale";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateDiscountSale(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateDiscountSale(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateDiscountSale(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteDiscountSale(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Sale/DeleteDiscountSale?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteDiscountSale(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteDiscountSale(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteDiscountSale(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -18703,6 +19041,7 @@ export class BookUnitListDto implements IBookUnitListDto {
     publisherId!: number | undefined;
     store!: StoreListDto;
     storeId!: number | undefined;
+    discounts!: DiscountBookListDto[] | undefined;
 
     constructor(data?: IBookUnitListDto) {
         if (data) {
@@ -18733,6 +19072,11 @@ export class BookUnitListDto implements IBookUnitListDto {
             this.publisherId = _data["publisherId"];
             this.store = _data["store"] ? StoreListDto.fromJS(_data["store"]) : <any>undefined;
             this.storeId = _data["storeId"];
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountBookListDto.fromJS(item));
+            }
         }
     }
 
@@ -18763,6 +19107,11 @@ export class BookUnitListDto implements IBookUnitListDto {
         data["publisherId"] = this.publisherId;
         data["store"] = this.store ? this.store.toJSON() : <any>undefined;
         data["storeId"] = this.storeId;
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -18786,6 +19135,7 @@ export interface IBookUnitListDto {
     publisherId: number | undefined;
     store: StoreListDto;
     storeId: number | undefined;
+    discounts: DiscountBookListDto[] | undefined;
 }
 
 export class CacheDto implements ICacheDto {
@@ -19458,6 +19808,7 @@ export class CreateBookUnitInput implements ICreateBookUnitInput {
     bookId!: number | undefined;
     publisherId!: number | undefined;
     storeId!: number | undefined;
+    discounts!: DiscountBookListDto[] | undefined;
 
     constructor(data?: ICreateBookUnitInput) {
         if (data) {
@@ -19484,6 +19835,11 @@ export class CreateBookUnitInput implements ICreateBookUnitInput {
             this.bookId = _data["bookId"];
             this.publisherId = _data["publisherId"];
             this.storeId = _data["storeId"];
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountBookListDto.fromJS(item));
+            }
         }
     }
 
@@ -19510,6 +19866,11 @@ export class CreateBookUnitInput implements ICreateBookUnitInput {
         data["bookId"] = this.bookId;
         data["publisherId"] = this.publisherId;
         data["storeId"] = this.storeId;
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -19529,6 +19890,7 @@ export interface ICreateBookUnitInput {
     bookId: number | undefined;
     publisherId: number | undefined;
     storeId: number | undefined;
+    discounts: DiscountBookListDto[] | undefined;
 }
 
 export class CreateCategoryInput implements ICreateCategoryInput {
@@ -19671,6 +20033,46 @@ export interface ICreateCustomerInput {
     phone: string | undefined;
 }
 
+export class CreateDiscountBookInput implements ICreateDiscountBookInput {
+    discountId!: number | undefined;
+    bookUnitId!: number | undefined;
+
+    constructor(data?: ICreateDiscountBookInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.discountId = _data["discountId"];
+            this.bookUnitId = _data["bookUnitId"];
+        }
+    }
+
+    static fromJS(data: any): CreateDiscountBookInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDiscountBookInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["discountId"] = this.discountId;
+        data["bookUnitId"] = this.bookUnitId;
+        return data; 
+    }
+}
+
+export interface ICreateDiscountBookInput {
+    discountId: number | undefined;
+    bookUnitId: number | undefined;
+}
+
 export class CreateDiscountInput implements ICreateDiscountInput {
     description!: string | undefined;
     value!: number;
@@ -19709,6 +20111,46 @@ export class CreateDiscountInput implements ICreateDiscountInput {
 export interface ICreateDiscountInput {
     description: string | undefined;
     value: number;
+}
+
+export class CreateDiscountSaleInput implements ICreateDiscountSaleInput {
+    discountId!: number | undefined;
+    saleId!: number | undefined;
+
+    constructor(data?: ICreateDiscountSaleInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.discountId = _data["discountId"];
+            this.saleId = _data["saleId"];
+        }
+    }
+
+    static fromJS(data: any): CreateDiscountSaleInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDiscountSaleInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["discountId"] = this.discountId;
+        data["saleId"] = this.saleId;
+        return data; 
+    }
+}
+
+export interface ICreateDiscountSaleInput {
+    discountId: number | undefined;
+    saleId: number | undefined;
 }
 
 export class CreateEditionDto implements ICreateEditionDto {
@@ -20202,6 +20644,7 @@ export class CreateSaleDetailInput implements ICreateSaleDetailInput {
     bookUnitId!: number | undefined;
     saleId!: number | undefined;
     qtty!: number;
+    priceWithDiscount!: number;
 
     constructor(data?: ICreateSaleDetailInput) {
         if (data) {
@@ -20217,6 +20660,7 @@ export class CreateSaleDetailInput implements ICreateSaleDetailInput {
             this.bookUnitId = _data["bookUnitId"];
             this.saleId = _data["saleId"];
             this.qtty = _data["qtty"];
+            this.priceWithDiscount = _data["priceWithDiscount"];
         }
     }
 
@@ -20232,6 +20676,7 @@ export class CreateSaleDetailInput implements ICreateSaleDetailInput {
         data["bookUnitId"] = this.bookUnitId;
         data["saleId"] = this.saleId;
         data["qtty"] = this.qtty;
+        data["priceWithDiscount"] = this.priceWithDiscount;
         return data; 
     }
 }
@@ -20240,6 +20685,7 @@ export interface ICreateSaleDetailInput {
     bookUnitId: number | undefined;
     saleId: number | undefined;
     qtty: number;
+    priceWithDiscount: number;
 }
 
 export class CreateSaleInput implements ICreateSaleInput {
@@ -20249,6 +20695,8 @@ export class CreateSaleInput implements ICreateSaleInput {
     totalAmount!: number;
     storeId!: number;
     customerId!: number;
+    details!: CreateSaleDetailInput[] | undefined;
+    discounts!: DiscountSaleListDto[] | undefined;
 
     constructor(data?: ICreateSaleInput) {
         if (data) {
@@ -20267,6 +20715,16 @@ export class CreateSaleInput implements ICreateSaleInput {
             this.totalAmount = _data["totalAmount"];
             this.storeId = _data["storeId"];
             this.customerId = _data["customerId"];
+            if (Array.isArray(_data["details"])) {
+                this.details = [] as any;
+                for (let item of _data["details"])
+                    this.details!.push(CreateSaleDetailInput.fromJS(item));
+            }
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountSaleListDto.fromJS(item));
+            }
         }
     }
 
@@ -20285,6 +20743,16 @@ export class CreateSaleInput implements ICreateSaleInput {
         data["totalAmount"] = this.totalAmount;
         data["storeId"] = this.storeId;
         data["customerId"] = this.customerId;
+        if (Array.isArray(this.details)) {
+            data["details"] = [];
+            for (let item of this.details)
+                data["details"].push(item.toJSON());
+        }
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -20296,6 +20764,8 @@ export interface ICreateSaleInput {
     totalAmount: number;
     storeId: number;
     customerId: number;
+    details: CreateSaleDetailInput[] | undefined;
+    discounts: DiscountSaleListDto[] | undefined;
 }
 
 export class CreateStoreInput implements ICreateStoreInput {
@@ -20762,6 +21232,54 @@ export interface IDelegatedImpersonateInput {
     userDelegationId: number;
 }
 
+export class DiscountBookListDto implements IDiscountBookListDto {
+    id!: number;
+    discount!: DiscountListDto;
+    discountId!: number | undefined;
+    bookUnitId!: number | undefined;
+
+    constructor(data?: IDiscountBookListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.discount = _data["discount"] ? DiscountListDto.fromJS(_data["discount"]) : <any>undefined;
+            this.discountId = _data["discountId"];
+            this.bookUnitId = _data["bookUnitId"];
+        }
+    }
+
+    static fromJS(data: any): DiscountBookListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DiscountBookListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["discount"] = this.discount ? this.discount.toJSON() : <any>undefined;
+        data["discountId"] = this.discountId;
+        data["bookUnitId"] = this.bookUnitId;
+        return data; 
+    }
+}
+
+export interface IDiscountBookListDto {
+    id: number;
+    discount: DiscountListDto;
+    discountId: number | undefined;
+    bookUnitId: number | undefined;
+}
+
 export class DiscountListDto implements IDiscountListDto {
     id!: number;
     description!: string | undefined;
@@ -20804,6 +21322,54 @@ export interface IDiscountListDto {
     id: number;
     description: string | undefined;
     value: number;
+}
+
+export class DiscountSaleListDto implements IDiscountSaleListDto {
+    id!: number;
+    discount!: DiscountListDto;
+    discountId!: number | undefined;
+    saleId!: number | undefined;
+
+    constructor(data?: IDiscountSaleListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.discount = _data["discount"] ? DiscountListDto.fromJS(_data["discount"]) : <any>undefined;
+            this.discountId = _data["discountId"];
+            this.saleId = _data["saleId"];
+        }
+    }
+
+    static fromJS(data: any): DiscountSaleListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DiscountSaleListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["discount"] = this.discount ? this.discount.toJSON() : <any>undefined;
+        data["discountId"] = this.discountId;
+        data["saleId"] = this.saleId;
+        return data; 
+    }
+}
+
+export interface IDiscountSaleListDto {
+    id: number;
+    discount: DiscountListDto;
+    discountId: number | undefined;
+    saleId: number | undefined;
 }
 
 export class DynamicEntityPropertyDto implements IDynamicEntityPropertyDto {
@@ -21137,6 +21703,7 @@ export class EditBookUnitInput implements IEditBookUnitInput {
     bookId!: number | undefined;
     publisherId!: number | undefined;
     storeId!: number | undefined;
+    discounts!: DiscountBookListDto[] | undefined;
     id!: number;
 
     constructor(data?: IEditBookUnitInput) {
@@ -21164,6 +21731,11 @@ export class EditBookUnitInput implements IEditBookUnitInput {
             this.bookId = _data["bookId"];
             this.publisherId = _data["publisherId"];
             this.storeId = _data["storeId"];
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountBookListDto.fromJS(item));
+            }
             this.id = _data["id"];
         }
     }
@@ -21191,6 +21763,11 @@ export class EditBookUnitInput implements IEditBookUnitInput {
         data["bookId"] = this.bookId;
         data["publisherId"] = this.publisherId;
         data["storeId"] = this.storeId;
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -21211,6 +21788,7 @@ export interface IEditBookUnitInput {
     bookId: number | undefined;
     publisherId: number | undefined;
     storeId: number | undefined;
+    discounts: DiscountBookListDto[] | undefined;
     id: number;
 }
 
@@ -23789,6 +24367,7 @@ export class GetBookInputForEditOutput implements IGetBookInputForEditOutput {
     bookId!: number | undefined;
     publisherId!: number | undefined;
     storeId!: number | undefined;
+    discounts!: DiscountBookListDto[] | undefined;
     id!: number;
 
     constructor(data?: IGetBookInputForEditOutput) {
@@ -23816,6 +24395,11 @@ export class GetBookInputForEditOutput implements IGetBookInputForEditOutput {
             this.bookId = _data["bookId"];
             this.publisherId = _data["publisherId"];
             this.storeId = _data["storeId"];
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountBookListDto.fromJS(item));
+            }
             this.id = _data["id"];
         }
     }
@@ -23843,6 +24427,11 @@ export class GetBookInputForEditOutput implements IGetBookInputForEditOutput {
         data["bookId"] = this.bookId;
         data["publisherId"] = this.publisherId;
         data["storeId"] = this.storeId;
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -23863,6 +24452,7 @@ export interface IGetBookInputForEditOutput {
     bookId: number | undefined;
     publisherId: number | undefined;
     storeId: number | undefined;
+    discounts: DiscountBookListDto[] | undefined;
     id: number;
 }
 
@@ -25281,6 +25871,8 @@ export class GetSaleForEditOutput implements IGetSaleForEditOutput {
     totalAmount!: number;
     storeId!: number;
     customerId!: number;
+    details!: SaleDetailListDto[] | undefined;
+    discounts!: DiscountSaleListDto[] | undefined;
     id!: number;
 
     constructor(data?: IGetSaleForEditOutput) {
@@ -25300,6 +25892,16 @@ export class GetSaleForEditOutput implements IGetSaleForEditOutput {
             this.totalAmount = _data["totalAmount"];
             this.storeId = _data["storeId"];
             this.customerId = _data["customerId"];
+            if (Array.isArray(_data["details"])) {
+                this.details = [] as any;
+                for (let item of _data["details"])
+                    this.details!.push(SaleDetailListDto.fromJS(item));
+            }
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountSaleListDto.fromJS(item));
+            }
             this.id = _data["id"];
         }
     }
@@ -25319,6 +25921,16 @@ export class GetSaleForEditOutput implements IGetSaleForEditOutput {
         data["totalAmount"] = this.totalAmount;
         data["storeId"] = this.storeId;
         data["customerId"] = this.customerId;
+        if (Array.isArray(this.details)) {
+            data["details"] = [];
+            for (let item of this.details)
+                data["details"].push(item.toJSON());
+        }
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -25331,6 +25943,8 @@ export interface IGetSaleForEditOutput {
     totalAmount: number;
     storeId: number;
     customerId: number;
+    details: SaleDetailListDto[] | undefined;
+    discounts: DiscountSaleListDto[] | undefined;
     id: number;
 }
 
@@ -30590,6 +31204,7 @@ export class SaleDetailListDto implements ISaleDetailListDto {
     bookUnitId!: number | undefined;
     saleId!: number | undefined;
     qtty!: number;
+    priceWithDiscount!: number;
 
     constructor(data?: ISaleDetailListDto) {
         if (data) {
@@ -30607,6 +31222,7 @@ export class SaleDetailListDto implements ISaleDetailListDto {
             this.bookUnitId = _data["bookUnitId"];
             this.saleId = _data["saleId"];
             this.qtty = _data["qtty"];
+            this.priceWithDiscount = _data["priceWithDiscount"];
         }
     }
 
@@ -30624,6 +31240,7 @@ export class SaleDetailListDto implements ISaleDetailListDto {
         data["bookUnitId"] = this.bookUnitId;
         data["saleId"] = this.saleId;
         data["qtty"] = this.qtty;
+        data["priceWithDiscount"] = this.priceWithDiscount;
         return data; 
     }
 }
@@ -30634,6 +31251,7 @@ export interface ISaleDetailListDto {
     bookUnitId: number | undefined;
     saleId: number | undefined;
     qtty: number;
+    priceWithDiscount: number;
 }
 
 export class SaleListDto implements ISaleListDto {
@@ -30647,6 +31265,7 @@ export class SaleListDto implements ISaleListDto {
     customer!: CustomerListDto;
     customerId!: number;
     details!: SaleDetailListDto[] | undefined;
+    discounts!: DiscountSaleListDto[] | undefined;
 
     constructor(data?: ISaleListDto) {
         if (data) {
@@ -30672,6 +31291,11 @@ export class SaleListDto implements ISaleListDto {
                 this.details = [] as any;
                 for (let item of _data["details"])
                     this.details!.push(SaleDetailListDto.fromJS(item));
+            }
+            if (Array.isArray(_data["discounts"])) {
+                this.discounts = [] as any;
+                for (let item of _data["discounts"])
+                    this.discounts!.push(DiscountSaleListDto.fromJS(item));
             }
         }
     }
@@ -30699,6 +31323,11 @@ export class SaleListDto implements ISaleListDto {
             for (let item of this.details)
                 data["details"].push(item.toJSON());
         }
+        if (Array.isArray(this.discounts)) {
+            data["discounts"] = [];
+            for (let item of this.discounts)
+                data["discounts"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -30714,6 +31343,7 @@ export interface ISaleListDto {
     customer: CustomerListDto;
     customerId: number;
     details: SaleDetailListDto[] | undefined;
+    discounts: DiscountSaleListDto[] | undefined;
 }
 
 export class SalesSummaryData implements ISalesSummaryData {

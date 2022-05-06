@@ -25,7 +25,8 @@ export class SaleComponent extends AppComponentBase {
     }
 
     ngOnInit(): void {
-        this.getSale();   
+        this.getSale(); 
+       
     }
     
   
@@ -51,7 +52,10 @@ export class SaleComponent extends AppComponentBase {
         getSale(): void {
         this._saleService.getSale(this.filter).subscribe((result) => {
             this.sale = result.items;
+            
         });
+        
+       
     }
 
     

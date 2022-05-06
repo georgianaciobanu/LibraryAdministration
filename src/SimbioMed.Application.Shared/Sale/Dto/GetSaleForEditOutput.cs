@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using SimbioMed.Sale.DtoDiscountSale;
 using SimbioMed.Sale.DtoSaleDetail;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace SimbioMed.Sale.Dto {
         public virtual int CustomerId { get; set; }
 
         public Collection<SaleDetailListDto> Details { get; set; }
+        public Collection<DiscountSaleListDto> Discounts { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SimbioMed.Customer.Dto;
+using SimbioMed.Sale.DtoDiscountSale;
 using SimbioMed.Sale.DtoSaleDetail;
 using SimbioMed.Store.Dto;
 using System;
@@ -19,6 +20,7 @@ namespace SimbioMed.Sale.Dto {
         public virtual CustomerListDto Customer { get; set; }
         public virtual int CustomerId { get; set; }
         public Collection<SaleDetailListDto> Details { get; set; }
+        public Collection<DiscountSaleListDto> Discounts { get; set; }
 
     }
 }

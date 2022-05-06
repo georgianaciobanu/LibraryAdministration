@@ -22,4 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SimbioMed.Core\SimbioMed.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SimbioMed\" />
+  </ItemGroup>
 </Project>

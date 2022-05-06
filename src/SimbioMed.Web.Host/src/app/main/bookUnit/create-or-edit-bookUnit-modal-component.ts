@@ -1,5 +1,5 @@
 import { Component, ViewChild, Injector, ElementRef, Output, EventEmitter } from '@angular/core';
-import { BookUnitServiceProxy,StoreListDto,PublisherListDto, EditBookUnitInput, CreateBookUnitInput, BookUnitListDto,BookListDto,BookServiceProxy,StoreServiceProxy,PublisherServiceProxy } from '@shared/service-proxies/service-proxies';
+import { DiscountServiceProxy,CreateDiscountBookInput,DiscountListDto, DiscountBookListDto,BookUnitServiceProxy,StoreListDto,PublisherListDto, EditBookUnitInput, CreateBookUnitInput, BookUnitListDto,BookListDto,BookServiceProxy,StoreServiceProxy,PublisherServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { finalize } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -24,10 +24,14 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
     books: BookListDto[] = [];
     publishers: PublisherListDto[] = [];
     stores: StoreListDto[] = [];
+    discountBook: CreateDiscountBookInput = new CreateDiscountBookInput();
+    discountBookView: DiscountBookListDto[]=[];
     bookUnitEdit: EditBookUnitInput = new EditBookUnitInput();
     selectedBook: number[] = [];
+    discounts: DiscountListDto[] = [];
     selectedPublisher: number[] = [];
     selectedStore: number[] = [];
+    selectedDiscount: number[] = [];
     active: boolean = false;
     saving: boolean = false;
     url: any;
@@ -36,7 +40,9 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
     booksAfterParseClass: IMultiSelectOption[] = [];
     publishersAfterParseClass: IMultiSelectOption[] = [];
     storesAfterParseClass: IMultiSelectOption[] = [];
+    discountsAfterParseClass: IMultiSelectOption[] = [];
     saveFlag: boolean = false;
+    insertedBookUnitId:number;
 
 
 
@@ -50,6 +56,17 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         displayAllSelectedText: true
 
     };
+
+    choosemany: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'form-control',
+        selectionLimit: 5,
+        autoUnselect: true,
+        closeOnSelect: true,
+        displayAllSelectedText: true
+
+    };
     constructor(
         injector: Injector,
         private _bookUnitService: BookUnitServiceProxy,
@@ -57,6 +74,7 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         private _publisherService: PublisherServiceProxy,
         private _storeService: StoreServiceProxy,
         private imageCompress: NgxImageCompressService,
+        private _discountsService: DiscountServiceProxy,
         private router: Router
 
     ) {
@@ -67,16 +85,20 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         this.getBooks();
         this.getStores();
         this.getPublishers();
+        this.getDiscounts();
+
     }
 
     show(bookUnitId): void {
         this.imgResultAfterCompression=null;
          this.selectedBook=[];
          this.selectedPublisher=[];
+         this.selectedDiscount=[];
          this.selectedStore=[];
          this.booksAfterParseClass=[];
          this.storesAfterParseClass=[];
          this.publishersAfterParseClass=[];
+         this.discountsAfterParseClass=[];
          this.active = true;
          this.bookUnit = new CreateBookUnitInput();
          this.modal.show();
@@ -89,8 +111,15 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         for (let x = 0; x < this.publishers.length; x++) {
             this.publishersAfterParseClass.push({ id: this.publishers[x].id, name: this.publishers[x].name })
         }
+        for (let x = 0; x < this.discounts.length; x++) {
+            this.discountsAfterParseClass.push({ id: this.discounts[x].id, name: this.discounts[x].description+ ' '+this.discounts[x].value })
+       }
+     
 
          if(bookUnitId!=null){
+            this.selectedDiscount=[];
+            this.selectedStore=[];
+            this.getDiscountBook(bookUnitId);
             this._bookUnitService.getBookUnitForEdit(bookUnitId).subscribe((result) => {
                 this.imgResultAfterCompression = this.bookUnitEdit.photoFileBytes;
                 this.imgResultAfterCompression = this.bookUnit.photoFileBytes;
@@ -99,15 +128,40 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
                 this.selectedBook.push(this.bookUnitEdit.bookId);
                 this.selectedPublisher.push(this.bookUnitEdit.publisherId);
                 this.selectedStore.push(this.bookUnitEdit.storeId);
-                this.selectedBook.push(this.bookUnit.bookId);
-                this.selectedPublisher.push(this.bookUnit.publisherId);
-                this.selectedStore.push(this.bookUnit.storeId);
+               // this.selectedBook.push(this.bookUnit.bookId);
+               // this.selectedPublisher.push(this.bookUnit.publisherId);
+               // this.selectedStore.push(this.bookUnit.storeId);
                 this.modal.show();
             });
+
+
          }
        
      }
- 
+     getDiscountBook(bookUnitId): void {
+        let dis = this;
+        this._bookUnitService.getDiscountBook(bookUnitId).subscribe((result) => {
+            this.discountBookView = result;
+
+            dis.discountBookView.forEach(element => {
+                dis.selectedDiscount.push(element.discountId);
+
+            });
+
+        });
+    }
+
+    getDiscounts(): void {
+
+        this._discountsService.getDiscounts('').subscribe((result) => {
+            this.discounts = result.items;
+        });
+
+    }
+
+    btnClick_goToDiscount= function () {
+        this.router.navigateByUrl('/app/main/discount');
+    };
      
      compressFile() {
          this.bookUnit.photoId = '00000000-0000-0000-0000-000000000000';
@@ -207,24 +261,28 @@ btnClick_goToTitle= function () {
 
             this.bookUnit.photoFileBytes = this.url;
         }
+        let hs=this;   
         this.spinnerService.show();
         this.bookUnit.bookId = this.selectedBook[0];
         this.bookUnit.storeId = this.selectedStore[0];
         this.bookUnit.publisherId = this.selectedPublisher[0];
 
-
         this._bookUnitService.createBookUnit(this.bookUnit)
             .pipe(finalize(() => this.saving = false))
-            .subscribe(() => {
+            .subscribe(result => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
                 this.spinnerService.hide();
                 this.modalSave.emit(this.bookUnit);
+                hs.insertedBookUnitId=result;
+                this.addNewDiscount();
+
             });
 
     }
 
     saveForEdit(): void {
+        let hs=this;   
         if (this.saveFlag)
             return;
         this.spinnerService.show();
@@ -241,13 +299,52 @@ btnClick_goToTitle= function () {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
                 this.spinnerService.hide();
+                hs.insertedBookUnitId=this.bookUnitEdit.id;
+                this.updateDiscountList();
                 this.modalSave.emit(this.bookUnitEdit);
                 this.imgResultAfterCompression = null
-
+               
             });
 
         this.saving = false;
     }
+
+    async updateDiscountList(): Promise<void> {
+        let dis = this;
+        this.discountBookView.forEach(function (disc) {
+            dis._bookUnitService.deleteDiscountBook(disc.id).subscribe(() => {
+            });
+
+        });
+
+     this.addNewDiscount();
+      
+
+
+        this.selectedDiscount = [];
+
+    }
+
+
+
+    addNewDiscount(): void{
+        let dis=this;
+        dis.selectedDiscount.forEach(function(det){
+            dis.discountBook=new CreateDiscountBookInput();
+            dis.discountBook.discountId=det;
+            dis.discountBook.bookUnitId=dis.insertedBookUnitId;
+            dis._bookUnitService.createDiscountBook(dis.discountBook) 
+            .pipe(finalize(() => dis.saving = false))
+            .subscribe(() => {
+                dis.modalSave.emit(dis.discountBook);
+            });
+
+
+
+        } );
+
+    }
+
 
     close(): void {
         this.modal.hide();

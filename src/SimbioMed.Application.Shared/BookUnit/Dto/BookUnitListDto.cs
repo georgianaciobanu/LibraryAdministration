@@ -1,8 +1,10 @@
 ﻿using SimbioMed.Book.Dto;
+using SimbioMed.BookUnit.DtoDiscountBook;
 using SimbioMed.Publisher.Dto;
 using SimbioMed.Store.Dto;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace SimbioMed.BookUnit.Dto {
@@ -33,5 +35,8 @@ namespace SimbioMed.BookUnit.Dto {
         public StoreListDto Store { get; set; }
 
         public virtual int? StoreId { get; set; }
+
+        public Collection<DiscountBookListDto> Discounts { get; set; }
+
     }
 }
