@@ -21,6 +21,6 @@ namespace SimbioMed.Sale.Dto {
         public virtual int CustomerId { get; set; }
         public Collection<SaleDetailListDto> Details { get; set; }
         public Collection<DiscountSaleListDto> Discounts { get; set; }
-
+       
     }
 }

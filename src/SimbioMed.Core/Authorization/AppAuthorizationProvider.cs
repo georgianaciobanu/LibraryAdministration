@@ -31,8 +31,48 @@ namespace SimbioMed.Authorization
             var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
             pages.CreateChildPermission(AppPermissions.Pages_DemoUiComponents, L("DemoUiComponents"));
             var administration = pages.CreateChildPermission(AppPermissions.Pages_Administration, L("Administration"));
+          
             var book = pages.CreateChildPermission(AppPermissions.Pages_Tenant_Book, L("Book"), multiTenancySides: MultiTenancySides.Tenant);
-            book.CreateChildPermission(AppPermissions.Pages_Tenant_Book_CreateBook, L("CreateNewBook"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Book_EditBook, L("EditBook"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Book_MenuBook, L("MenuBook"), multiTenancySides: MultiTenancySides.Tenant);
+
+            var sale = pages.CreateChildPermission(AppPermissions.Pages_Tenant_Sale, L("Sale"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Sale_MenuSale, L("MenuSale"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Customer, L("Customer"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_EditCustomer, L("EditCustomer"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_MenuCustomer, L("MenuCustomer"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Publisher, L("Publisher"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Publisher_EditPublisher, L("EditPublisher"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Publisher_MenuPublisher, L("MenuPublisher"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Author, L("Author"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Author_EditAuthor, L("EditAuthor"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Author_MenuAuthor, L("MenuAuthor"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Store, L("Store"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Store_EditStore, L("EditStore"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Store_MenuStore, L("MenuStore"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_City, L("City"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_City_EditCity, L("EditCity"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_City_MenuCity, L("MenuCity"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Categories, L("Categories"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Categories_EditCategories, L("EditCategories"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Categories_MenuCategories, L("MenuCategories"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Discount, L("Discount"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Discount_EditDiscount, L("EditDiscount"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_Discount_MenuDiscount, L("MenuDiscount"), multiTenancySides: MultiTenancySides.Tenant);
+
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_BookUnit, L("BookUnit"), multiTenancySides: MultiTenancySides.Tenant);
+            pages.CreateChildPermission(AppPermissions.Pages_Tenant_BookUnit_EditBookUnit, L("EditBookUnit"), multiTenancySides: MultiTenancySides.Tenant);
+            book.CreateChildPermission(AppPermissions.Pages_Tenant_BookUnit_MenuBookUnit, L("MenuBookUnit"), multiTenancySides: MultiTenancySides.Tenant);
+
+
+
 
             var roles = administration.CreateChildPermission(AppPermissions.Pages_Administration_Roles, L("Roles"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Create, L("CreatingNewRole"));

@@ -1,8 +1,10 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
+using SimbioMed.Authorization;
 using SimbioMed.BookUnit.Dto;
 using SimbioMed.BookUnit.DtoDiscountBook;
 using SimbioMed.Storage;
@@ -14,6 +16,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimbioMed.BookUnit {
+
+
+
+
     public class BookUnitAppService : SimbioMedAppServiceBase, IBookUnitAppService {
 
         private readonly IRepository<BookUnit> _bookUnitRepository;
@@ -27,6 +33,8 @@ namespace SimbioMed.BookUnit {
             _discountBookRepository = discountBookRepository;
 
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit_EditBookUnit)]
+
         public async Task<int> CreateBookUnit(CreateBookUnitInput input) {
             var book = ObjectMapper.Map<BookUnit>(input);
 
@@ -42,6 +50,9 @@ namespace SimbioMed.BookUnit {
             return id;
         }
 
+
+        [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit_EditBookUnit)]
+
         public async Task DeleteBookUnit(GetBookInputForEditInput input) {
             await _bookUnitRepository.DeleteAsync(input.Id);
             GetBookInputForEditOutput bookUnit = await GetBookUnitForEdit(input);
@@ -49,6 +60,15 @@ namespace SimbioMed.BookUnit {
                 DeleteDiscountBook(dis.Id);
             }
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Store)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_City)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Categories)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Discount)]
 
         public ListResultDto<BookUnitListDto> GetBookUnit(GetBookUnitInput input) {
             var book = _bookUnitRepository
@@ -101,6 +121,7 @@ namespace SimbioMed.BookUnit {
         //}
 
 
+        [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit_EditBookUnit)]
 
         public async Task EditBookUnit(EditBookUnitInput input) {
             var book = await _bookUnitRepository.GetAsync(input.Id);

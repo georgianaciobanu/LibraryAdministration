@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
@@ -6,6 +7,7 @@ using Abp.Reflection.Extensions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SimbioMed.Authorization;
 using SimbioMed.Configuration;
 using SimbioMed.Migrator;
 using SimbioMed.Sale.Dto;
@@ -19,6 +21,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimbioMed.Sale {
+
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Book)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Author)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Store)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_City)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Categories)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Discount)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Sale)]
+
+
+
     public class SaleAppService : SimbioMedAppServiceBase, ISaleAppService {
 
         private readonly IRepository<Sale> _saleUnitRepository;

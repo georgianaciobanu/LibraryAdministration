@@ -1,8 +1,10 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
+using SimbioMed.Authorization;
 using SimbioMed.Publisher.Dto;
 using SimbioMed.Storage;
 using System;
@@ -12,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimbioMed.Publisher {
+
+
     public class PublisherAppService : SimbioMedAppServiceBase, IPublisherAppService {
 
         private readonly IRepository<Publisher> _publisherRepository;
@@ -23,6 +27,8 @@ namespace SimbioMed.Publisher {
             _binaryObjectManager = binaryObjectManager;
 
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher_EditPublisher)]
+
         public async Task CreatePublisher(CreatePublisherInput input) {
             var publisher = ObjectMapper.Map<Publisher>(input);
 
@@ -35,6 +41,7 @@ namespace SimbioMed.Publisher {
             }
             await _publisherRepository.InsertAsync(publisher);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher_EditPublisher)]
 
         public async Task DeletePublisher(EntityDto input) {
             await _publisherRepository.DeleteAsync(input.Id);
@@ -48,6 +55,9 @@ namespace SimbioMed.Publisher {
 
         //    return new GetPictureOutput(Convert.ToBase64String(file.Bytes));
         //}
+
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_City)]
 
         public ListResultDto<PublisherListDto> GetPublisher(GetPublisherInput input) {
             var publisher = _publisherRepository
@@ -63,6 +73,7 @@ namespace SimbioMed.Publisher {
 
             return new ListResultDto<PublisherListDto>(ObjectMapper.Map<List<PublisherListDto>>(publisher));
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher_EditPublisher)]
 
         public async Task EditPublisher(EditPublisherInput input) {
             var publisher = await _publisherRepository.GetAsync(input.Id);
@@ -92,6 +103,7 @@ namespace SimbioMed.Publisher {
             await _publisherRepository.UpdateAsync(publisher);
         }
 
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Publisher_EditPublisher)]
 
         public async Task<GetPublisherForEditOutput> GetPublisherForEdit(GetPublisherForEditInput input) {
             var publisher = await _publisherRepository.GetAsync(input.Id);

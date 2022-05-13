@@ -13,7 +13,9 @@
         public const string Pages_DemoUiComponents = "Pages.DemoUiComponents";
         public const string Pages_Administration = "Pages.Administration";
         public const string Pages_Tenant_Book = "Pages.Tenant.Book";
-        public const string Pages_Tenant_Book_CreateBook = "Pages_Tenant_Book_CreateBook";
+        public const string Pages_Tenant_Book_EditBook = "Pages_Tenant_Book_EditBook";
+        public const string Pages_Tenant_Book_MenuBook = "Pages_Tenant_Book_MenuBook";
+
 
         public const string Pages_Administration_Roles = "Pages.Administration.Roles";
         public const string Pages_Administration_Roles_Create = "Pages.Administration.Roles.Create";
@@ -99,6 +101,51 @@
         public const string Pages_Administration_Host_Maintenance = "Pages.Administration.Host.Maintenance";
         public const string Pages_Administration_Host_Settings = "Pages.Administration.Host.Settings";
         public const string Pages_Administration_Host_Dashboard = "Pages.Administration.Host.Dashboard";
+
+
+        public const string Pages_Tenant_Sale = "Pages.Tenant.Sale";
+        public const string Pages_Tenant_Sale_MenuSale = "Pages_TenantSale_MenuSale";
+
+
+        public const string Pages_Tenant_Customer = "Pages.Tenant.Customer";
+        public const string Pages_Tenant_Customer_EditCustomer = "Pages_Tenant_Customer_EditCustomer";
+        public const string Pages_Tenant_Customer_MenuCustomer = "Pages_Tenant_Customer_MenuCustomer";
+
+
+        public const string Pages_Tenant_Publisher = "Pages.Tenant.Publisher";
+        public const string Pages_Tenant_Publisher_EditPublisher = "Pages_Tenant_Publisher_EditPublisher";
+        public const string Pages_Tenant_Publisher_MenuPublisher = "Pages_Tenant_Publisher_MenuPublisher";
+
+
+        public const string Pages_Tenant_Author = "Pages.Tenant.Author";
+        public const string Pages_Tenant_Author_EditAuthor = "Pages_Tenant_Author_EditAuthor";
+        public const string Pages_Tenant_Author_MenuAuthor = "Pages_Tenant_Author_MenuAuthor";
+
+
+        public const string Pages_Tenant_City = "Pages.Tenant.City";
+        public const string Pages_Tenant_City_EditCity = "Pages_Tenant_City_EditCity";
+        public const string Pages_Tenant_City_MenuCity = "Pages_Tenant_City_MenuCity";
+
+
+        public const string Pages_Tenant_Categories = "Pages.Tenant.Categories";
+        public const string Pages_Tenant_Categories_EditCategories = "Pages_Tenant_Categories_EditCategories";
+        public const string Pages_Tenant_Categories_MenuCategories = "Pages_Tenant_Categories_MenuCategories";
+
+
+        public const string Pages_Tenant_Store = "Pages.Tenant.Store";
+        public const string Pages_Tenant_Store_EditStore = "Pages_Tenant_Store_EditStore";
+        public const string Pages_Tenant_Store_MenuStore = "Pages_Tenant_Store_MenuStore";
+
+
+        public const string Pages_Tenant_BookUnit = "Pages.Tenant.BookUnit";
+        public const string Pages_Tenant_BookUnit_EditBookUnit = "Pages_Tenant_BookUnit_EditBookUnit";
+        public const string Pages_Tenant_BookUnit_MenuBookUnit = "Pages_Tenant_BookUnit_MenuBookUnit";
+
+
+        public const string Pages_Tenant_Discount = "Pages.Tenant.Discount";
+        public const string Pages_Tenant_Discount_EditDiscount = "Pages_Tenant_Discount_EditDiscount";
+        public const string Pages_Tenant_Discount_MenuDiscount = "Pages_Tenant_Discount_MenuDiscount";
+
 
     }
 }

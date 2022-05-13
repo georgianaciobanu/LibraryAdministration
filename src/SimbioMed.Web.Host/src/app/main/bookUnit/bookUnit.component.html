@@ -12,7 +12,7 @@
               <br />
               <div class="kt-subheader__toolbar">
                 <div class="kt-subheader__wrapper">
-                  <button class="btn btn-primary" (click)="createOrEditBookUnitModal.show(null)">
+                  <button *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission" class="btn btn-primary" (click)="createOrEditBookUnitModal.show(null)">
                     <i class="fa fa-plus"></i>
                     {{ 'Add New Book' | localize }}
                   </button>
@@ -130,20 +130,21 @@
                       
                           <td style="width: 50px">
                             <div class="col kt-align-right">
-                              <button
+                              <button 
                                 (click)="createOrEditBookUnitModal.show(record.id)"
                                 title="{{ l('Edit') }}"
                                 class="btn btn-outline-warning m-btn m-btn--icon m-btn--icon-only m-btn--pill"
+                                
                                 href="javascript:;"
                               >
-                                <i class="fas fa-pencil-alt"></i>
+                                <i class="flaticon-eye"></i>
                               </button>
                             </div>
                           </td>
 
                           <td style="width: 50px">
                             <div class="col kt-align-right">
-                              <button
+                              <button *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission"
                                 id="deleteBookUnit"
                                 (click)="deleteBookUnit(record)"
                                 title="{{ 'Delete' | localize }}"

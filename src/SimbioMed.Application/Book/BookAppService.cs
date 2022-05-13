@@ -18,8 +18,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimbioMed.Book {
-    [AbpAuthorize(AppPermissions.Pages_Tenant_Book)]
-    [AbpAuthorize(AppPermissions.Pages_Tenant_Book_CreateBook)]
+
+
+
     public class BookAppService : SimbioMedAppServiceBase, IBookAppService {
         private readonly IRepository<Book> _bookRepository;
         public readonly IRepository<Author.Author> _authorRepository;
@@ -33,6 +34,7 @@ namespace SimbioMed.Book {
             _bookCategoriesRepository = bookCategoriesRepository;
 
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task<int> CreateBook(CreateBookInput input) {
             var book = ObjectMapper.Map<Book>(input);
@@ -41,11 +43,13 @@ namespace SimbioMed.Book {
 
             return entityId;
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task CreateBookCategory(CreateBookCategoryInput input) {
             var bookCategory = ObjectMapper.Map<BookCategory>(input);
             await _bookCategoriesRepository.InsertAsync(bookCategory);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task DeleteBook(GetBookForEditInput input) {
             await _bookRepository.DeleteAsync(input.Id);
@@ -54,11 +58,13 @@ namespace SimbioMed.Book {
                 DeleteBookCategory(bookCateg.Id);
             }
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task DeleteBookCategory(int id) {
             await _bookCategoriesRepository.DeleteAsync(id);
         }
 
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task EditBook(EditBookInput input) {
             var book = await _bookRepository.GetAsync(input.Id);
@@ -66,6 +72,7 @@ namespace SimbioMed.Book {
             book.AuthorId = input.AuthorId;
             await _bookRepository.UpdateAsync(book);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book_EditBook)]
 
         public async Task<GetBookForEditOutput> GetBookForEdit(GetBookForEditInput input) {
             var book = await _bookRepository.GetAsync(input.Id);
@@ -78,6 +85,11 @@ namespace SimbioMed.Book {
 
             return boo;
         }
+
+
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Book)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Categories)]
         public ListResultDto<BookListDto> GetBooks(GetBooksInput input) {
 
             var books =   _bookRepository

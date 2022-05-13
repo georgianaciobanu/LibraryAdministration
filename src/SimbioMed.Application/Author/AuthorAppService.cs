@@ -1,9 +1,11 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
 using SimbioMed.Author.Dto;
+using SimbioMed.Authorization;
 using SimbioMed.Authorization.Users.Profile.Dto;
 using SimbioMed.Storage;
 using System;
@@ -13,6 +15,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimbioMed.Author {
+
+
+
     public class AuthorAppService : SimbioMedAppServiceBase, IAuthorAppService {
 
         private readonly IRepository<Author> _authorRepository;
@@ -23,6 +28,7 @@ namespace SimbioMed.Author {
             _binaryObjectManager = binaryObjectManager;
 
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author_EditAuthor)]
 
         public async Task CreateAuthor(CreateAuthorInput input) {
             
@@ -37,10 +43,14 @@ namespace SimbioMed.Author {
             }
             await _authorRepository.InsertAsync(author);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author_EditAuthor)]
 
         public async Task DeleteAuthor(EntityDto input) {
             await _authorRepository.DeleteAsync(input.Id);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author)]
+        [AbpAuthorize(AppPermissions.Pages_Tenant_City)]
+
 
         public ListResultDto<AuthorListDto> GetAuthor(GetAuthorInput input) {
             var author = _authorRepository
@@ -58,6 +68,7 @@ namespace SimbioMed.Author {
             return new ListResultDto<AuthorListDto>(ObjectMapper.Map<List<AuthorListDto>>(author));
         }
 
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author_EditAuthor)]
 
         public async Task EditAuthor(EditAuthorInput input) {
             var author = await _authorRepository.GetAsync(input.Id);
@@ -88,6 +99,7 @@ namespace SimbioMed.Author {
 
             await _authorRepository.UpdateAsync(author);
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Author_EditAuthor)]
 
         public async Task<GetAuthorForEditOutput> GetAuthorForEdit(GetAuthorForEditInput input) {
             var author = await _authorRepository.GetAsync(input.Id);

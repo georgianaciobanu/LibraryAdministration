@@ -26,7 +26,7 @@
 >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form *ngIf="active" #bookUnitForm="ngForm" novalidate (ngSubmit)="save()">
+      <form #myForm="ngForm" *ngIf="active" #bookUnitForm="ngForm" novalidate (ngSubmit)="save()">
         <div class="modal-header">
           <h4 class="modal-title">
             <span>{{"Book" | localize}}</span>
@@ -38,7 +38,7 @@
         <div class="modal-body">
           <label>{{l("Image")}}</label>
           <section>
-            <button class="geo-buttons" (click)="compressFile()">Choose image</button>
+            <button class="geo-buttons"*ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission" (click)="compressFile()">Choose image</button>
             <br />
             <img
             style="max-height: 100%; max-width: 100%; width: 120px"
@@ -138,7 +138,7 @@
             </div>
 
 
-            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToTitle();">
+            <button type="button" *ngIf="'Pages_Tenant_Book_EditBook' | permission" class="btn btn-primary pull-right" (click)="btnClick_goToTitle();">
               <i class="fa fa-plus"></i>
               Add Title
             </button>
@@ -157,7 +157,7 @@
               ></ss-multiselect-dropdown>
             </div>
 
-            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToPublisher();">
+            <button type="button" *ngIf="'Pages_Tenant_Publisher_EditPublisher' | permission" class="btn btn-primary pull-right" (click)="btnClick_goToPublisher();">
               <i class="fa fa-plus"></i>
               Add Publisher
             </button>
@@ -175,7 +175,7 @@
                 [ngModelOptions]="{standalone: true}"
               ></ss-multiselect-dropdown>
              </div>
-             <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToDiscount();">
+             <button type="button" *ngIf="'Pages_Tenant_Discount_EditDiscount' | permission" class="btn btn-primary pull-right" (click)="btnClick_goToDiscount();">
               <i class="fa fa-plus"></i>
               Add Discount
             </button>
@@ -193,7 +193,7 @@
                 [ngModelOptions]="{standalone: true}"
               ></ss-multiselect-dropdown>
             </div>
-            <button type="button" class="btn btn-primary pull-right" (click)="btnClick_goToStore();">
+            <button type="button" *ngIf="'Pages_Tenant_Store_EditStore' | permission" class="btn btn-primary pull-right" (click)="btnClick_goToStore();">
               <i class="fa fa-plus"></i>
               Add Store
             </button>
@@ -238,14 +238,14 @@
           <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">
             {{"Cancel" | localize}}
           </button>
-          <button
+          <button  *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission"
             type="submit"
             class="btn btn-primary"
             [disabled]="!bookUnitForm.form.valid"
             [buttonBusy]="saving"
             [busyText]="l('SavingWithThreeDot' | localize)"
           >
-            <i class="fa fa-save"></i>
+            <i class="fa fa-save" ></i>
             <span>{{"Save" | localize}}</span>
           </button>
         </div>
