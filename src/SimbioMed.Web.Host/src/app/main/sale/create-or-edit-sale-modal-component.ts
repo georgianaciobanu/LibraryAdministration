@@ -1,5 +1,5 @@
 import { Component, ViewChild, Injector, ElementRef, Output, EventEmitter } from '@angular/core';
-import {CreateDiscountSaleInput,DiscountListDto, DiscountSaleListDto, DiscountServiceProxy, CreateSaleDetailInput, SaleDetailListDto,SaleServiceProxy,BookUnitServiceProxy, BookUnitListDto, StoreListDto, CreateSaleInput, SaleListDto,CustomerServiceProxy,StoreServiceProxy,CustomerListDto } from '@shared/service-proxies/service-proxies';
+import {CreateDiscountSaleInput,  DiscountListDto, DiscountSaleListDto, DiscountServiceProxy, CreateSaleDetailInput, SaleDetailListDto,SaleServiceProxy,BookUnitServiceProxy, BookUnitListDto, StoreListDto, CreateSaleInput, SaleListDto,CustomerServiceProxy,StoreServiceProxy,CustomerListDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { finalize } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -141,6 +141,8 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         });
     }
 
+
+
     getDiscountSale(saleId): void {
         let dis = this;
         this._saleService.getDiscountSale(saleId).subscribe((result) => {
@@ -170,6 +172,8 @@ export class CreateOrEditSaleModalComponent extends AppComponentBase {
         });
 
     }
+
+    
     getBooks(): void {
 
         this._bookUnitService.getBookUnit('').subscribe((result) => {

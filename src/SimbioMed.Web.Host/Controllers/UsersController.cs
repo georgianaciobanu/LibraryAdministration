@@ -2,6 +2,7 @@
 using SimbioMed.Authorization;
 using SimbioMed.Storage;
 using Abp.BackgroundJobs;
+using Microsoft.Extensions.Configuration;
 
 namespace SimbioMed.Web.Controllers
 {

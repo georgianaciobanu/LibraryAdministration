@@ -91,6 +91,9 @@ import { NgxSpinnerModule, NgxSpinnerComponent } from 'ngx-spinner';
 import { ScrollTopComponent } from './shared/layout/scroll-top.component';
 import { AppBsModalModule } from '@shared/common/appBsModal/app-bs-modal.module';
 import { SubheaderModule } from './shared/common/sub-header/subheader.module';
+import { LoginService } from '@account/login/login.service';
+import { UserLoginAttemptDto, UserLoginInfoDto } from '@shared/service-proxies/service-proxies';
+import { LoginModule } from '@account/login/login.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -175,6 +178,7 @@ import { SubheaderModule } from './shared/common/sub-header/subheader.module';
         NgxSpinnerModule,
         AppBsModalModule,
         SubheaderModule,
+        
     ],
     providers: [
         ImpersonationService,
@@ -182,6 +186,7 @@ import { SubheaderModule } from './shared/common/sub-header/subheader.module';
         UserNotificationHelper,
         ChatSignalrService,
         DatePipe,
+        
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,

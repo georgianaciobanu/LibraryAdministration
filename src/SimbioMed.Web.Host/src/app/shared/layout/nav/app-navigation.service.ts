@@ -48,7 +48,7 @@ export class AppNavigationService {
                         '/app/admin/organization-units'
                     ),
                     new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),
-                    new AppMenuItem('Users', 'Pages.Administration.Users', 'flaticon-users', '/app/admin/users'),
+                    new AppMenuItem('Users', 'Pages.Tenant.Dashboard', 'flaticon-users', '/app/admin/users'),
                     new AppMenuItem(
                         'Languages',
                         'Pages.Administration.Languages',

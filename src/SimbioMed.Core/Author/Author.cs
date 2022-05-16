@@ -22,7 +22,7 @@ namespace SimbioMed.Author {
         [Required]
         [MaxLength(MaxNameLenght)]
         public virtual string LastName { get; set; }
-        [Required]
+        
         public virtual DateTime DateOfBirth { get; set; }
         public virtual DateTime DateOfDeath { get; set; }
 

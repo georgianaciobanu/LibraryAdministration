@@ -3,14 +3,18 @@ using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using com.sun.security.ntlm;
+using java.io;
 using Microsoft.EntityFrameworkCore;
 using SimbioMed.Authorization;
+using SimbioMed.Authorization.Users.Dto;
 using SimbioMed.BookUnit.Dto;
 using SimbioMed.BookUnit.DtoDiscountBook;
 using SimbioMed.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +35,7 @@ namespace SimbioMed.BookUnit {
             _bookUnitRepository = bookUnitRepository;
             _binaryObjectManager = binaryObjectManager;
             _discountBookRepository = discountBookRepository;
+
 
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_BookUnit_EditBookUnit)]
@@ -80,7 +85,7 @@ namespace SimbioMed.BookUnit {
                             .WhereIf(
                                 !input.Filter.IsNullOrEmpty(),
                                 p => p.ISBN.ToLower().Contains(input.Filter.ToLower()) ||
-                                     p.Book.Title.ToLower().Contains(input.Filter.ToLower())||
+                                     p.Book.Title.ToLower().Contains(input.Filter.ToLower()) ||
                                      p.Book.Author.FirstName.ToLower().Contains(input.Filter.ToLower()) ||
                                      p.Book.Author.LastName.ToLower().Contains(input.Filter.ToLower()) ||
                                      p.Book.Author.LastName.ToLower().Contains(input.Filter.ToLower()) ||
@@ -90,7 +95,7 @@ namespace SimbioMed.BookUnit {
                             .OrderBy(p => p.Book.Title)
                             .ToList();
 
-            var bo= new ListResultDto<BookUnitListDto>(ObjectMapper.Map<List<BookUnitListDto>>(book));
+            var bo = new ListResultDto<BookUnitListDto>(ObjectMapper.Map<List<BookUnitListDto>>(book));
             foreach (BookUnitListDto elem in bo.Items) {
                 GetBookUnitInput inp = new GetBookUnitInput();
                 inp.Filter = elem.Id.ToString();
@@ -103,7 +108,7 @@ namespace SimbioMed.BookUnit {
 
         public async Task<GetBookInputForEditOutput> GetBookUnitForEdit(GetBookInputForEditInput input) {
             var book = await _bookUnitRepository.GetAsync(input.Id);
-            var bo= ObjectMapper.Map<GetBookInputForEditOutput>(book);
+            var bo = ObjectMapper.Map<GetBookInputForEditOutput>(book);
             GetBookUnitInput inp = new GetBookUnitInput();
             inp.Filter = bo.Id.ToString();
             bo.Discounts = GetDiscountBook(inp);
@@ -181,5 +186,9 @@ namespace SimbioMed.BookUnit {
         public async Task DeleteDiscountBook(int id) {
             await _discountBookRepository.DeleteAsync(id);
         }
+
+
+       
     }
 }
+

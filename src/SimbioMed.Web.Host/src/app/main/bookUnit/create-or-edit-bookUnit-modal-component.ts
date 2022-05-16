@@ -1,5 +1,5 @@
 import { Component, ViewChild, Injector, ElementRef, Output, EventEmitter } from '@angular/core';
-import { DiscountServiceProxy,CreateDiscountBookInput,DiscountListDto, DiscountBookListDto,BookUnitServiceProxy,StoreListDto,PublisherListDto, EditBookUnitInput, CreateBookUnitInput, BookUnitListDto,BookListDto,BookServiceProxy,StoreServiceProxy,PublisherServiceProxy } from '@shared/service-proxies/service-proxies';
+import { DiscountServiceProxy,UserServiceProxy,UserLoginInfoDto, SessionServiceProxy,PermissionServiceProxy,CreateDiscountBookInput,DiscountListDto, DiscountBookListDto,BookUnitServiceProxy,StoreListDto,PublisherListDto, EditBookUnitInput, CreateBookUnitInput, BookUnitListDto,BookListDto,BookServiceProxy,StoreServiceProxy,PublisherServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { finalize } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -7,6 +7,8 @@ import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-mul
 import { NgxImageCompressService } from "ngx-image-compress";
 import { Router } from '@angular/router';
 import { id } from '@swimlane/ngx-charts';
+import { Form } from '@angular/forms';
+
 
 
 @Component({
@@ -43,7 +45,8 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
     discountsAfterParseClass: IMultiSelectOption[] = [];
     saveFlag: boolean = false;
     insertedBookUnitId:number;
-
+    permissions: boolean=true;
+    currentUser :number;
 
 
     chooseone: IMultiSelectSettings = {
@@ -75,6 +78,9 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         private _storeService: StoreServiceProxy,
         private imageCompress: NgxImageCompressService,
         private _discountsService: DiscountServiceProxy,
+        private _permissionService: PermissionServiceProxy,
+        private _sessionService: SessionServiceProxy,
+        private _userService: UserServiceProxy,
         private router: Router
 
     ) {
@@ -86,10 +92,19 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
         this.getStores();
         this.getPublishers();
         this.getDiscounts();
+        this.getPermission();
+
 
     }
 
-    show(bookUnitId): void {
+     show(bookUnitId): void {
+        if(this.permissions==false){
+            console.log('nu are permisiunea de edit');
+            
+        }else{
+            console.log('are permisiunea de edit');
+
+        }
         this.imgResultAfterCompression=null;
          this.selectedBook=[];
          this.selectedPublisher=[];
@@ -162,6 +177,27 @@ export class CreateOrEditBookUnitModalComponent extends AppComponentBase {
     btnClick_goToDiscount= function () {
         this.router.navigateByUrl('/app/main/discount');
     };
+
+    getPermission():  Promise<void> {
+      return  this._sessionService
+        .getCurrentLoginInformations()
+       .toPromise()
+       .then(
+            (result) => {
+                this.currentUser = result.user.id;  
+                this._userService.getUserPermissionsForEdit(this.currentUser).subscribe((result) => {
+                   if(result.grantedPermissionNames.find(x => x == 'Pages_Tenant_BookUnit_EditBookUnit'))
+                   this.permissions=true;
+                   else
+                   this.permissions=false;
+                });     
+            }
+            
+        );
+      
+   
+    }
+   
      
      compressFile() {
          this.bookUnit.photoId = '00000000-0000-0000-0000-000000000000';

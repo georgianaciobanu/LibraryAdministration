@@ -26,7 +26,7 @@
 >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form #myForm="ngForm" *ngIf="active" #bookUnitForm="ngForm" novalidate (ngSubmit)="save()">
+      <form  *ngIf="active" #bookUnitForm="ngForm" novalidate (ngSubmit)="save()">
         <div class="modal-header">
           <h4 class="modal-title">
             <span>{{"Book" | localize}}</span>
@@ -60,6 +60,7 @@
           <div class="form-group">
             <label>{{"ISBN" | localize}}</label>
             <input
+            [disabled]="!permissions"
               #nameInput
               class="form-control"
               type="text"
@@ -72,7 +73,8 @@
           <div class="form-group">
             <label>{{"Copy Number" | localize}}</label>
             <input
-              class="form-control"
+            [disabled]="!permissions"
+                          class="form-control"
               type="number"
               name="copyNo"
               [(ngModel)]="bookUnit.copyNo"
@@ -83,6 +85,7 @@
           <div class="form-group">
             <label>{{"Price" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="number"
               name="price"
@@ -94,6 +97,7 @@
           <div class="form-group">
             <label>{{"Pages" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="number"
               name="pages"
@@ -105,6 +109,7 @@
           <div class="form-group">
             <label>{{"Publishing Year" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="number"
               name="publishYear"
@@ -115,7 +120,7 @@
           </div>
           <div class="form-group form-md-line-input no-hint">
             <label>{{l("Condition")}}</label>
-            <select name="Condition" [(ngModel)]="bookUnit.condition" class="form-control">
+            <select name="Condition" [(ngModel)]="bookUnit.condition" class="form-control"   [disabled]="!permissions">
               <option value="0">{{"New" | localize}}</option>
               <option value="1">{{"Used" | localize}}</option>
               <option value="2">{{"Good" | localize}}</option>
@@ -128,6 +133,7 @@
             <label>{{l("Title")}}</label>
             <div class="container text-centre">
               <ss-multiselect-dropdown
+              [disabled]="!permissions"
                 class="form-group"
                 name="bookId"
                 [settings]="chooseone"
@@ -148,6 +154,7 @@
             <label>{{l("Publisher")}}</label>
             <div class="container text-centre">
               <ss-multiselect-dropdown
+              [disabled]="!permissions"
                 class="form-group"
                 name="publisherId"
                 [settings]="chooseone"
@@ -167,6 +174,7 @@
             <label>{{l("Discouns")}}</label>
             <div class="container text-centre">
               <ss-multiselect-dropdown
+              [disabled]="!permissions"
                 class="form-group"
                 name="discountId"
                 [settings]="choosemany"
@@ -185,6 +193,7 @@
             <label>{{l("Store")}}</label>
             <div class="container text-centre">
               <ss-multiselect-dropdown
+              [disabled]="!permissions"
                 class="form-group"
                 name="storeId"
                 [settings]="chooseone"
@@ -203,6 +212,7 @@
             <br>
             <label>{{"Unit (A-J)" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="text"
               name="unit"
@@ -214,6 +224,7 @@
           <div class="form-group">
             <label>{{"Column (1-20)" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="number"
               name="column"
@@ -225,6 +236,7 @@
           <div class="form-group">
             <label>{{"Row (1-20)" | localize}}</label>
             <input
+            [disabled]="!permissions"
               class="form-control"
               type="number"
               name="row"

@@ -19651,8 +19651,8 @@ export enum ConditionDto {
 
 export class CreateAuthorInput implements ICreateAuthorInput {
     cityId!: number | undefined;
-    firstName!: string | undefined;
-    lastName!: string | undefined;
+    firstName!: string;
+    lastName!: string;
     dateOfBirth!: DateTime;
     dateOfDeath!: DateTime;
     gender!: GenderDto;
@@ -19704,8 +19704,8 @@ export class CreateAuthorInput implements ICreateAuthorInput {
 
 export interface ICreateAuthorInput {
     cityId: number | undefined;
-    firstName: string | undefined;
-    lastName: string | undefined;
+    firstName: string;
+    lastName: string;
     dateOfBirth: DateTime;
     dateOfDeath: DateTime;
     gender: GenderDto;

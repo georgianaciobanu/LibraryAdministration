@@ -1,3 +1,17 @@
+<style>
+  input[type=file]::file-selector-button {
+  border: 2px solid #6c5ce7;
+  padding: .2em .4em;
+  border-radius: .2em;
+  background-color: #a29bfe;
+  transition: 1s;
+}
+
+input[type=file]::file-selector-button:hover {
+  background-color: #81ecec;
+  border: 2px solid #00cec9;
+}
+</style>
 <div [@routerTransition]>
   <div [class]="containerClass">
     <div class="card card-custom gutter-b">
@@ -12,13 +26,46 @@
               <br />
               <div class="kt-subheader__toolbar">
                 <div class="kt-subheader__wrapper">
-                  <button *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission" class="btn btn-primary" (click)="createOrEditBookUnitModal.show(null)">
+                  <button
+                    *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission"
+                    class="btn btn-primary"
+                    (click)="createOrEditBookUnitModal.show(null)"
+                  >
                     <i class="fa fa-plus"></i>
                     {{ 'Add New Book' | localize }}
                   </button>
                 </div>
                 <br />
               </div>
+              <!-- <div class="kt-subheader__wrapper">
+                <a href="javascript:;" class="no-padding">
+                  <span class="fileinput-button">
+                <button *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission" class="btn btn-primary pull-right"
+                        customUpload="true"
+                        name="ExcelFileUpload"
+                        #ExcelFileUpload
+                        maxFileSize="10000000"
+                        auto="auto"
+                        accept=".csv,.xls,.xlsx"
+                        (uploadHandler)="uploadExcel($event)"
+                        (onError)="onUploadExcelError()"   >
+                        {{ 'Import Excel' | localize }}
+                      </button>
+                </span>
+              </a>
+              </div> -->
+
+ 
+
+              <div class="pull-right">
+                <label for="fileUpload" style="align-items:right ;font-size: medium;font-style: normal ;">Import Books from Excel</label>
+                <br>
+                <label for="fileUpload" style="align-items:right ;">Upload file</label>
+                <br>
+                <input type="file" id="fileUpload" accept=".xlsx, .xls, .csv" (change)="onFileSelected($event)">
+              </div>
+             
+             
             </div>
           </div>
           <div class="kt-container kt-grid__item kt-grid__item--fluid">
@@ -82,16 +129,15 @@
                             {{ 'Publisher' | localize }}
                             <p field="publisher"></p>
                           </th>
-                          <th style="width:100px">
+                          <th style="width: 100px">
                             {{ 'ISBN' | localize }}
                             <p field="isbn"></p>
                           </th>
 
-                          <th style="width:180px">
+                          <th style="width: 180px">
                             {{ 'Condition' | localize }}
                             <p field="condition"></p>
                           </th>
-                     
                         </tr>
                       </ng-template>
 
@@ -127,14 +173,13 @@
                               <p *ngSwitchDefault></p>
                             </div>
                           </td>
-                      
+
                           <td style="width: 50px">
                             <div class="col kt-align-right">
-                              <button 
+                              <button
                                 (click)="createOrEditBookUnitModal.show(record.id)"
                                 title="{{ l('Edit') }}"
                                 class="btn btn-outline-warning m-btn m-btn--icon m-btn--icon-only m-btn--pill"
-                                
                                 href="javascript:;"
                               >
                                 <i class="flaticon-eye"></i>
@@ -144,7 +189,8 @@
 
                           <td style="width: 50px">
                             <div class="col kt-align-right">
-                              <button *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission"
+                              <button
+                                *ngIf="'Pages_Tenant_BookUnit_EditBookUnit' | permission"
                                 id="deleteBookUnit"
                                 (click)="deleteBookUnit(record)"
                                 title="{{ 'Delete' | localize }}"

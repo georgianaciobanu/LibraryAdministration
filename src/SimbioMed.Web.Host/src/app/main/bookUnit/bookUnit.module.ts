@@ -8,7 +8,10 @@ import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule} from '@angular/material/core'
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
-
+import { LoginModule } from '@account/login/login.module';
+import { UsersModule } from '@app/admin/users/users.module';
+import { UserLoginInfoDto } from '@shared/service-proxies/service-proxies';
+import { MatIconModule } from '@angular/material/icon'
 
 
 
@@ -16,7 +19,7 @@ import {FormsModule} from '@angular/forms';
 @NgModule({
      declarations: [BookUnitComponent,CreateOrEditBookUnitModalComponent],
     imports: [AppSharedModule, BookUnitRoutingModule, MultiselectDropdownModule,MatDatepickerModule,
-        MatNativeDateModule, FormsModule,
-        MatInputModule]
+        MatNativeDateModule, FormsModule,LoginModule,UsersModule,
+        MatInputModule,MatIconModule, ]
 })
 export class BookUnitModule {}

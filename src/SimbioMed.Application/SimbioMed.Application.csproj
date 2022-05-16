@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Abp.EntityFrameworkCore.EFPlus" Version="6.5.0" />
+    <PackageReference Include="IKVM" Version="8.1.5717" />
     <PackageReference Include="NPOI" Version="2.5.4" />
   </ItemGroup>
   <ItemGroup>
